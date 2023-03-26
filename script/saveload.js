@@ -7,7 +7,13 @@ function save(){
 	
 }
 function load(){
-	game = JSON.parse(localStorage.getItem("incrementalEvolution"));
+	if(JSON.parse(localStorage.getItem("incrementalEvolution"))==null) {
+			game = originalgame;
+		}
+	else{
+		game = JSON.parse(localStorage.getItem("incrementalEvolution"));
+	}
+	
 	for(var i=1;i<9;i++){
 		document.getElementById("buyNG"+i).value="Cost:"+ExpantaNum(game.normal.generators.price[i-1]);
 
