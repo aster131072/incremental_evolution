@@ -1,2 +1,2 @@
 # incremental_evolution
-A incremental game based on AntimatterDimensions and FE000000
+An incremental game based on AntimatterDimensions and FE000000
