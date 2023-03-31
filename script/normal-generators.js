@@ -25,7 +25,7 @@ function buymaxnormalgenerator(i){
 		game.normal.generators.amount[i-1]=ExpantaNum(game.normal.generators.amount[i-1]).add(buyamount);
 		game.normal.generators.bought[i-1]=ExpantaNum(game.normal.generators.bought[i-1]).add(buyamount);
 		//document.getElementById("buyNG"+i).value="Cost:"+ExpantaNum(game.normal.generators.actuallprice[i-1]);
-		console.log(ExpantaNum(buyamount));
+		//console.log(ExpantaNum(buyamount));
 	}
 
 }

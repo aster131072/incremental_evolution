@@ -12,7 +12,7 @@ function tick()
 	if(game.normal.upgrades[7]) game.normal.speed=ExpantaNum(game.normal.speed).times(4);
 	if(game.normal.upgrades[5]&&ExpantaNum(game.normal.number).gte(1e10)) game.normal.speed=ExpantaNum(game.normal.speed).times(ExpantaNum(game.normal.number).log10().times(0.1));
 	game.normal.speed=ExpantaNum(game.normal.speed).times(game.normal.sacrifice);
-	if(game.normal.upgrades[8]&&document.getElementById("autobuygenerator").checked==true) autobuynormalgenerator();
+	//if(game.normal.upgrades[8]&&document.getElementById("autobuygenerator").checked==true) autobuynormalgenerator();
 	game.normal.generators.factor=[1,1,1,1,1,1,1,1];
 	if(game.normal.upgrades[0]) game.normal.generators.factor[0]=3;
 	if(game.normal.upgrades[3]) game.normal.generators.factor[4]=5;

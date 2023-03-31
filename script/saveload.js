@@ -35,8 +35,8 @@ function load(){
 	}
 	if(game.normal.upgrades[2]==0) document.getElementById("max all").type="hidden";
 	if(game.normal.upgrades[2]==1) document.getElementById("max all").type="button";
-	if(game.normal.upgrades[8]==0) document.getElementById("autobuyer").type="hidden";
-	if(game.normal.upgrades[8]==1) document.getElementById("autobuyer").type="button";
+	//if(game.normal.upgrades[8]==0) document.getElementById("autobuyer").type="hidden";
+	//if(game.normal.upgrades[8]==1) document.getElementById("autobuyer").type="button";
 	if(game.normal.upgrades[9]==0) document.getElementById("sacrifice").style.display='none';
 	if(game.normal.upgrades[9]==1) document.getElementById("sacrifice").style.display='block';
 	if(game.normal.upgrades[10]==0) document.getElementById("boost").style.display='none';
