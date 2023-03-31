@@ -13,144 +13,184 @@
 <script src="script/tab.js" defer></script>
 <script src="script/normal-generators.js" defer></script>
 <script src="script/normal-upgrades.js" defer></script>
+<script src="script/autobuyer.js" defer></script>
+<script src="script/sacrifice.js" defer></script>
+<script src="script/boost.js" defer></script>
+<script src="script/infinity.js" defer></script>
 
 <title>增量进化</title>
 </head>
 <body onbeforeunload="save()" onpageshow="load()">
+<div class="notification" id="testnotification">
+  <span class="notification-text">这是通知消息</span>
+</div>
 <p>
 你有<span id="normal number">0</span>点数。
 </p>
-
+<p id="infinityN" style="display: block;">
+达到<span id="infinity requirement"></span>点数可进入无限。<br />
+</p>
+<p id="infinityY" style="display: none;color:#00ff00;">
+<input type="button" value="进入无限" onclick="infinity()" style="background-color:#00ff00;">
+你将获得<span id="infinity number get"></span>无限点数。
+</p>
+<p>
+<span id="infinity number" style="color:#00ff00;"></span>
+<span id="infinity time"></span>
+</p>
 <p>
 <input type="button" onclick="setTab('normal')" value="normal">
+<input type="button" onclick="setTab('autobuyer')" value="autobuyer" id="canautobuy">
 <input type="button" onclick="setTab('normal_upgrade')" value="upgrade">
 <input type="button" onclick="setTab('achievements')" value="achievements">
 <input type="button" onclick="setTab('option')" value="option">
 
 </p>
 
+
 <div id="normal" style="display: none;">
 <p>
-<input type="button" value="+1" id="manual" title="+1点数。" />
+<input type="button" value="+1" id="manual" />
 <input type="hidden" value="Max All" onclick="maxAllNormalGenerator()" id="max all" />
 </p>
 <p><input type="button" value="cheat" id="cheat" /></p>
+<table align="center">
+	<tr>
+		<td class="generator">
+		一阶生成器
+		</td>
+		<td class="generator">
+		(<span id="normalgenerator1"></span>)
+		</td>
+		<td class="generator">
+		x<span id="normalgeneratormultiplyer1"></span>
+		</td>
+		<td class="generator">
+		<input type="button" onclick="buynormalgenerator(1)" id="buyNG1">
+		</td>
+	</tr>
+	<tr>
+		<td class="generator">
+		二阶生成器
+		</td>
+		<td class="generator">
+		(<span id="normalgenerator2"></span>)
+		</td>
+		<td class="generator">
+		x<span id="normalgeneratormultiplyer2"></span>
+		</td>
+		<td class="generator">
+		<input type="button" onclick="buynormalgenerator(2)" id="buyNG2">
+		</td>
+	</tr>
+	<tr>
+		<td class="generator">
+		三阶生成器
+		</td>
+		<td class="generator">
+		(<span id="normalgenerator3"></span>)
+		</td>
+		<td class="generator">
+		x<span id="normalgeneratormultiplyer3"></span>
+		</td>
+		<td class="generator">
+		<input type="button" onclick="buynormalgenerator(3)" id="buyNG3">
+		</td>
+	</tr>
+	<tr>
+		<td class="generator">
+		四阶生成器
+		</td>
+		<td class="generator">
+		(<span id="normalgenerator4"></span>)
+		</td>
+		<td class="generator">
+		x<span id="normalgeneratormultiplyer4"></span>
+		</td>
+		<td class="generator">
+		<input type="button" onclick="buynormalgenerator(4)" id="buyNG4">
+		</td>
+	</tr>
+	<tr>
+		<td class="generator">
+		五阶生成器
+		</td>
+		<td class="generator">
+		(<span id="normalgenerator5"></span>)
+		</td>
+		<td class="generator">
+		x<span id="normalgeneratormultiplyer5"></span>
+		</td>
+		<td class="generator">
+		<input type="button" onclick="buynormalgenerator(5)" id="buyNG5">
+		</td>
+	</tr>
+	<tr>
+		<td class="generator">
+		六阶生成器
+		</td>
+		<td class="generator">
+		(<span id="normalgenerator6"></span>)
+		</td>
+		<td class="generator">
+		x<span id="normalgeneratormultiplyer6"></span>
+		</td>
+		<td class="generator">
+		<input type="button" onclick="buynormalgenerator(6)" id="buyNG6">
+		</td>
+	</tr>
+	<tr>
+		<td class="generator">
+		七阶生成器
+		</td>
+		<td class="generator">
+		(<span id="normalgenerator7"></span>)
+		</td>
+		<td class="generator">
+		x<span id="normalgeneratormultiplyer7"></span>
+		</td>
+		<td class="generator">
+		<input type="button" onclick="buynormalgenerator(7)" id="buyNG7">
+		</td>
+	</tr>
+	<tr>
+		<td class="generator">
+		八阶生成器
+		</td>
+		<td class="generator">
+		(<span id="normalgenerator8"></span>)
+		</td>
+		<td class="generator">
+		x<span id="normalgeneratormultiplyer8"></span>
+		</td>
+		<td class="generator">
+		<input type="button" onclick="buynormalgenerator(8)" id="buyNG8">
+		</td>
+	</tr>
 
-<div style="width:100%;">
-<div style="width:25%;float:left;">
-一阶生成器
-</div>
-<div style="width:25%;float:left;">
-(<span id="normalgenerator1"></span>)
-</div>
-<div style="width:25%;float:left;">
-x<span id="normalgeneratormultiplyer1"></span>
-</div>
-<div style="width:20%;float:left;">
-<input type="button" onclick="buynormalgenerator(1)" id="buyNG1">
-</div>
+
+</table>
+
+<div id="sacrifice" style="display: none;" align="center">
+	当前献祭效果：全部生成器*<span id="sacrifice_factor"></span><br />
+	<input type="button" value="献祭" onclick="sacrifice()">使乘数变为<span id="sacrifice_effect"></span>
 </div>
 
-<div style="width:100%;">
-<div style="width:25%;float:left;">
-二阶生成器
-</div>
-<div style="width:25%;float:left;">
-(<span id="normalgenerator2"></span>)
-</div>
-<div style="width:25%;float:left;">
-x<span id="normalgeneratormultiplyer2"></span>
-</div>
-<div style="width:20%;float:left;">
-<input type="button" onclick="buynormalgenerator(2)" id="buyNG2">
-</div>
+<div id="boost" style="display: none;" align="center">
+	当前加速效果：献祭效果^<span id="boost_factor"></span><br />
+	<input type="button" value="加速" onclick="boost()">使指数变为<span id="boost_effect"></span>
 </div>
 
-<div style="width:100%;">
-<div style="width:25%;float:left;">
-三阶生成器
-</div>
-<div style="width:25%;float:left;">
-(<span id="normalgenerator3"></span>)
-</div>
-<div style="width:25%;float:left;">
-x<span id="normalgeneratormultiplyer3"></span>
-</div>
-<div style="width:20%;float:left;">
-<input type="button" onclick="buynormalgenerator(3)" id="buyNG3">
-</div>
-</div>
-<div style="width:100%;">
-<div style="width:25%;float:left;">
-四阶生成器
-</div>
-<div style="width:25%;float:left;">
-(<span id="normalgenerator4"></span>)
-</div>
-<div style="width:25%;float:left;">
-x<span id="normalgeneratormultiplyer4"></span>
-</div>
-<div style="width:25%;float:left;">
-<input type="button" onclick="buynormalgenerator(4)" id="buyNG4">
-</div>
-</div>
-<div style="width:100%;">
-<div style="width:25%;float:left;">
-五阶生成器
-</div>
-<div style="width:25%;float:left;">
-(<span id="normalgenerator5"></span>)
-</div>
-<div style="width:25%;float:left;">
-x<span id="normalgeneratormultiplyer5"></span>
-</div>
-<div style="width:25%;float:left;">
-<input type="button" onclick="buynormalgenerator(5)" id="buyNG5">
-</div>
-</div>
-<div style="width:100%;">
-<div style="width:25%;float:left;">
-六阶生成器
-</div>
-<div style="width:25%;float:left;">
-(<span id="normalgenerator6"></span>)
-</div>
-<div style="width:25%;float:left;">
-x<span id="normalgeneratormultiplyer6"></span>
-</div>
-<div style="width:25%;float:left;">
-<input type="button" onclick="buynormalgenerator(6)" id="buyNG6">
-</div>
-</div>
-<div style="width:100%;">
-<div style="width:25%;float:left;">
-七阶生成器
-</div>
-<div style="width:25%;float:left;">
-(<span id="normalgenerator7"></span>)
-</div>
-<div style="width:25%;float:left;">
-x<span id="normalgeneratormultiplyer7"></span>
-</div>
-<div style="width:25%;float:left;">
-<input type="button" onclick="buynormalgenerator(7)" id="buyNG7">
-</div>
-</div>
-<div style="width:100%;">
-<div style="width:25%;float:left;">
-八阶生成器
-</div>
-<div style="width:25%;float:left;">
-(<span id="normalgenerator8"></span>)
-</div>
-<div style="width:25%;float:left;">
-x<span id="normalgeneratormultiplyer8"></span>
-</div>
-<div style="width:25%;float:left;">
-<input type="button" onclick="buynormalgenerator(8)" id="buyNG8">
-</div>
 </div>
 
+<div id="autobuyer" style="display: none;">
+<table align="center">
+	<tr>
+		<td class="autobuyer">
+			自动购买生成器：<input type="checkbox" id="autobuygenerator">
+		</td>
+	</tr>
+</table>
 </div>
 
 <div id="normal_upgrade" style="display: none;">
@@ -194,8 +234,18 @@ x<span id="normalgeneratormultiplyer8"></span>
     <input type="button" onclick="nu8()" value="1e30点数" id="nu8b">
     </td>
     <td id="nu9">
-    自动购买最大生成器。<br />
+    自动购买生成器。<br />
     <input type="button" onclick="nu9()" value="1e40点数" id="nu9b">
+    </td>
+  </tr>
+  <tr>
+    <td id="nu10">
+    解锁献祭。<br />
+    <input type="button" onclick="nu10()" value="1e50点数" id="nu10b">
+    </td>
+    <td id="nu11">
+    解锁加速。<br />
+    <input type="button" onclick="nu11()" value="1e60点数" id="nu11b">
     </td>
   </tr>
 </table>
@@ -207,13 +257,21 @@ x<span id="normalgeneratormultiplyer8"></span>
 <p>
 关于<br />
 本游戏模仿<a href="http://ivark.github.io/" target="_blank">《反物质维度》</a>和<a href="https://dan-simon.github.io/misc/fe000000/" target="_blank">《FE000000》</a>制作，你可以点击链接来玩它们。<br />
+调整tick间隔（量力而行！）<input type="range" id="delay" value="1.7" min="1.5" max="2.3" step="0.01"><span id="delaytext"></span>
+<input type="button" value="确认修改" onclick="changedelay()"><br />
+
 </p>
 </div>
 <div style="width:33%;float:left;">
 <p>
 更新履历<br />
+
+v0.1.1 2023-3-30 更新“进入无限”！终于做出了第一个重置层。<br />
+v0.0.12 2023-3-30 更新“加速”。<br />
+v0.0.11 2023-3-30 更新“献祭”。<br />
+v0.0.10 2023-3-30 添加一个调整tick间隔的滑块。<br />
 v0.0.9 2022-11-19 添加成就系统。<br />
-v0.0.8 2022-11-17 添加“升级”界面。<br />
+v0.0.8 2022-11-17 更新“升级”。<br />
 v0.0.7 2022-11-17 添加“Max All”按钮。<br />
 v0.0.6 2022-11-15 添加离线进度。<br />
 v0.0.5 2022-11-13 添加一阶至八阶生成器。<br />
@@ -238,59 +296,104 @@ import:
 </p>
 </div>
 </div>
+
+<!--achievement-->
+<div>
+	<div class="notification" id="notificationach1">
+		<span class="notification-text">完成成就：开始游戏</span>
+	</div>
+	<div class="notification" id="notificationach2">
+		<span class="notification-text">完成成就：自动化</span>
+	</div>
+	<div class="notification" id="notificationach3">
+		<span class="notification-text">完成成就：(自动化)^2</span>
+	</div>
+	<div class="notification" id="notificationach4">
+		<span class="notification-text">完成成就：新的机制</span>
+	</div>
+	<div class="notification" id="notificationach5">
+		<span class="notification-text">完成成就：使用连点器</span>
+	</div>
+	<div class="notification" id="notificationach6">
+		<span class="notification-text">完成成就：y'=klg(y)</span>
+	</div>
+	<div class="notification" id="notificationach7">
+		<span class="notification-text">完成成就：同样是八个</span>
+	</div>
+	<div class="notification" id="notificationach8">
+		<span class="notification-text">完成成就：鸡肋的自动化</span>
+	</div>
+</div>
 <div id="achievements" style="display: none;">
 <table align="center">
   <tr>
-    <td class="achNO" title="点击+1按钮。" id="ach1">
+    <td class="achNO" id="ach1">
     开始游戏
+    <span class="tooltip-text">点击+1按钮。</span>
     </td>
-    <td class="achNO" title="购买一阶生成器。" id="ach2">
+    <td class="achNO" id="ach2">
     自动化
+    <span class="tooltip-text">购买一阶生成器。</span>
     </td>
-    <td class="achNO" title="购买二阶生成器。" id="ach3">
+    <td class="achNO" id="ach3">
     (自动化)^2
+    <span class="tooltip-text">购买二阶生成器</span>
     </td>
-    <td class="achNO" title="购买第一个升级。" id="ach4">
+    <td class="achNO" id="ach4">
     新的机制
+    <span class="tooltip-text">购买第一个升级。</span>
     </td>
-    <td class="achNO" title="解锁购买最大。" id="ach5">
+    <td class="achNO" id="ach5">
     使用连点器
+    <span class="tooltip-text">解锁购买最大。</span>
     </td>
-    <td class="achNO" title="购买普通升级6。" id="ach6">
+    <td class="achNO" id="ach6">
     y'=klg(y)
+    <span class="tooltip-text">购买普通升级6。</span>
     </td>
-    <td class="achNO" title="购买八阶生成器。" id="ach7">
+    <td class="achNO" id="ach7">
     同样是八个
+    <span class="tooltip-text">购买八阶生成器。</span>
     </td>
-    <td class="achNO" title="解锁自动购买最大。" id="ach8">
-    过早的自动化
+    <td class="achNO" id="ach8">
+    鸡肋的自动化
+    <span class="tooltip-text">解锁自动购买最大。</span>
     </td>
   </tr>
   <tr>
-    <td class="achNO" title="" id="ach9">
-    
+    <td class="achNO" id="ach9">
+    	
+    	<span class="tooltip-text"></span>
     </td>
-    <td class="achNO" title="" id="ach10">
-    
+    <td class="achNO" id="ach10">
+    	
+    	<span class="tooltip-text"></span>
     </td>
-    <td class="achNO" title="" id="ach11">
-    
+    <td class="achNO" id="ach11">
+    	
+    	<span class="tooltip-text"></span>
     </td>
-    <td class="achNO" title="" id="ach12">
-    
+    <td class="achNO" id="ach12">
+    	
+    	<span class="tooltip-text"></span>
     </td>
-    <td class="achNO" title="" id="ach13">
-    
+    <td class="achNO" id="ach13">
+    	
+    	<span class="tooltip-text"></span>
     </td>
-    <td class="achNO" title="" id="ach14">
-    
+    <td class="achNO" id="ach14">
+    	
+    	<span class="tooltip-text"></span>
     </td>
-    <td class="achNO" title="" id="ach15">
-    
+    <td class="achNO" id="ach15">
+    	
+    	<span class="tooltip-text"></span>
     </td>
-    <td class="achNO" title="" id="ach16">
-    
+    <td class="achNO" id="ach16">
+    	
+    	<span class="tooltip-text"></span>
     </td>
+
   </tr>
 </table>
 </div>

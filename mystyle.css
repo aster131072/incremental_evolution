@@ -19,12 +19,22 @@ border:1px solid white;
 background-color:#ff0000;
 border-radius:10px;
 }
+.generator{
+  border:0px solid black;
+  background-color:#000000;
+  border-radius:0px;
+}
+.autobuyer{
+background-color:#000000;
+border-radius:0px;
+}
 .achNO{
 width:100px;
 height:100px;
 background-image: radial-gradient(#ff0000,#000000);
 //background-color:#777777;
 border-radius:20px;
+position:relative;
 }
 .achYES{
 width:100px;
@@ -32,6 +42,53 @@ height:100px;
 background-image: radial-gradient(#00ff00,#000000);
 //background-color:#00ff00;
 border-radius:20px;
+position:relative;
+}
+.tooltip-text {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  padding: 5px;
+  background-color: #000000;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,.2);
+  z-index: 1;
 }
 
+.achYES:hover .tooltip-text {
+  display: block;
+}
+.achNO:hover .tooltip-text {
+  display: block;
+}
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 300px;
+  padding: 10px;
+  background-color: #ffff00;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,.2);
+  z-index: 9999;
+  display: none;
+  color:#000000;
+}
 
+.notification.show {
+  display: block;
+}
+
+.notification-close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
