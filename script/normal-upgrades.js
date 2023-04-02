@@ -5,7 +5,7 @@ game.normal.number=ExpantaNum(game.normal.number).minus(1000);
 document.getElementById("nu1").style.backgroundColor="#00ff00";
 //document.getElementById("nu1b").value="已购买";
 game.normal.upgrades[0]=1;
-if(game.ach[3]==0){game.ach[3]=1;document.getElementById("ach4").className="achYES";}
+getAchievement(4);
 }
 }
 function nu2(){
@@ -23,7 +23,7 @@ document.getElementById("max all").type="button";
 document.getElementById("nu3").style.backgroundColor="#00ff00";
 //document.getElementById("nu3b").value="已购买";
 game.normal.upgrades[2]=1;
-if(game.ach[4]==0){game.ach[4]=1;document.getElementById("ach5").className="achYES";}
+getAchievement(5);
 }
 }
 function nu4(){
@@ -48,7 +48,7 @@ game.normal.number=ExpantaNum(game.normal.number).minus(1e20);
 document.getElementById("nu6").style.backgroundColor="#00ff00";
 //document.getElementById("nu6b").value="已购买";
 game.normal.upgrades[5]=1;
-if(game.ach[5]==0){game.ach[5]=1;document.getElementById("ach6").className="achYES";}
+getAchievement(6);
 }
 }
 function nu7(){
@@ -73,8 +73,10 @@ game.normal.number=ExpantaNum(game.normal.number).minus(1e40);
 document.getElementById("nu9").style.backgroundColor="#00ff00";
 //document.getElementById("nu9b").value="已购买";
 game.normal.upgrades[8]=1;
-if(game.ach[7]==0){game.ach[7]=1;document.getElementById("ach8").className="achYES";}
-document.getElementById("canautobuy").type="button";
+getAchievement(8);
+for(i=1;i<=8;i++){
+	document.getElementById("autoNG"+i).style.display='table-cell'
+}
 }
 }
 function nu10(){
