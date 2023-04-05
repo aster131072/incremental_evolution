@@ -5,6 +5,7 @@ function buynormalgenerator(i){
 		game.normal.number=ExpantaNum(game.normal.number).minus(ExpantaNum(game.normal.generators.actuallprice[i-1]));
 		game.normal.generators.amount[i-1]=ExpantaNum(game.normal.generators.amount[i-1]).add(1);
 		game.normal.generators.bought[i-1]=ExpantaNum(game.normal.generators.bought[i-1]).add(1);
+		game.normal.generators.actuallprice[i-1]=ExpantaNum(game.normal.generators.actuallprice[i-1]).times(game.normal.generators.scale[i-1]);
 		//document.getElementById("buyNG"+i).value="Cost:"+ExpantaNum(game.normal.generators.actuallprice[i-1]);
 		canBuyNG=1;
 	}

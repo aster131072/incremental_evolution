@@ -47,44 +47,22 @@ function load(){
 	if(game.normal.upgrades[9]==1) document.getElementById("sacrifice").style.display='block';
 	if(game.normal.upgrades[10]==0) document.getElementById("boost").style.display='none';
 	if(game.normal.upgrades[10]==1) document.getElementById("boost").style.display='block';
-	//读取NG状态
-	const autonormalgenerator = [];
-	for (let i = 1; i <= 8; i++) {
-	  (function(index) { // 使用立即执行函数封装回调函数
-	    const checkbox = document.getElementById("autobuygenerator" + index);
-	      if (game.normal.generators.autobuyer[index - 1]) {
-	      	checkbox.checked = true;
-	        generatordelay = game.normal.generators.autodelay[index - 1];
-	        const bulk = document.getElementById("bulkgenerator" + index);
-	        if (game.normal.generators.bulkbuy[index - 1] == false) {
-	        	bulk.checked = false;
-	          const autogeneratorId = setInterval(function() {
-	            buynormalgenerator(index);
-	          }, generatordelay);
-	          autonormalgenerator[index - 1] = autogeneratorId;
-	        } else {
-	        	bulk.checked = true;
-	          const autogeneratorId = setInterval(function() {
-	            buymaxnormalgenerator(index);
-	          }, generatordelay);
-	          autonormalgenerator[index - 1] = autogeneratorId;
-	        }
-	      } else {
-	      	checkbox.checked = false;
-	        clearInterval(autonormalgenerator[index - 1]);
-	      }
-	  })(i); // 传递当前的 i 值
-	}
+
 	//读取成就
 	for(var i=1;i<=game.ach.length;i++){
 		if(game.ach[i-1]==1){
 		document.getElementById("ach"+i).className="achYES";
 		}
 	}
-
-	gameSpeed=1001;
-	var d=new Date();
-	if(game.time!=0) setTimeout(function(){gameSpeed=1;},(d.getTime()-game.time)/1000);
+		
+	if(game.time!=0) {
+		gameSpeed=1001;
+		var d=new Date();
+		let offlinetime = d.getTime()-game.time;
+		if(offlinetime>28800000) getAchievement(12);
+		if(offlinetime>1000) setTimeout(function(){gameSpeed=1;},Math.floor(offlinetime/1000));
+	}
+	
 }
 function reset(){
 var confirmation = confirm("你真的要重置数据吗？这会重置一切，且没有任何奖励");

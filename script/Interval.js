@@ -5,7 +5,20 @@ var gameSpeed = 1;
 
 function tick()
 {
-
+	var d=new Date();
+	var nowtime=d.getTime();
+	for(let i=1;i<=8;i++){
+		if(game.normal.generators.autobuyer[i-1]){
+			if(nowtime-game.normal.generators.timer[i-1]>=game.normal.generators.autodelay[i-1]){
+				game.normal.generators.timer[i-1]=nowtime;
+				if(game.normal.generators.bulkbuy[i-1]){
+					buymaxnormalgenerator(i);
+				}else{
+					buynormalgenerator(i);
+				}
+			}
+		}
+	}
 	game.normal.speed = 1;
 	if(game.normal.upgrades[1]) game.normal.speed=ExpantaNum(game.normal.speed).times(1.3);
 	if(game.normal.upgrades[4]) game.normal.speed=ExpantaNum(game.normal.speed).times(2);

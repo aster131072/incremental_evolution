@@ -11,6 +11,7 @@ function infinity(){
 		game.normal.sacrifice=1;
 		game.normal.boost=1;
 		game.normal.upgrades=[0,0,0,0,0,0,0,0,0,0,0];
+		game.normal.generators.autobuyer=[false,false,false,false,false,false,false,false];
 		for(var i=1;i<=game.normal.upgrades.length;i++){
 			if(game.normal.upgrades[i-1]==0){
 				document.getElementById("nu"+i).style.backgroundColor="#ff0000";
@@ -26,7 +27,7 @@ function infinity(){
 		game.infinity.starttime=d.getTime();
 		if(!game.infinity.hasinfinitied) document.getElementById("infinity_upgrade_tab").style.display='inline';
 		game.infinity.hasinfinitied=true;
-		
+		getAchievement(11);
 	}
 	infinity_confirmation==false;
 }
