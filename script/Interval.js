@@ -432,7 +432,7 @@ requestAnimationFrame(loop);
 mainInterval = setInterval(tick,game.delay);
 document.getElementById("manual").onclick = () =>{
 game.normal.number=ExpantaNum(game.normal.number).add(1);
-document.getElementById("normal number").innerHTML=ExpantaNum.floor(game.normal.number);
+//document.getElementById("normal number").innerHTML=ExpantaNum.floor(game.normal.number);
 getAchievement(1);
 }
 document.getElementById("cheat").onclick = () =>{
