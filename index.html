@@ -11,13 +11,18 @@
 <script src="script/Interval.js" defer></script>
 <script src="script/saveload.js" defer></script>
 <script src="script/tab.js" defer></script>
+<script src="script/confirm-config.js" defer></script>
 <script src="script/normal-generators.js" defer></script>
 <script src="script/normal-upgrades.js" defer></script>
 <script src="script/autobuyer.js" defer></script>
 <script src="script/normal-sacrifice.js" defer></script>
 <script src="script/normal-boost.js" defer></script>
+<script src="script/normal-challenges.js" defer></script>
 <script src="script/infinity.js" defer></script>
 <script src="script/infinity-generators.js" defer></script>
+<script src="script/infinity-upgrades.js" defer></script>
+<script src="script/infinity-challenges.js" defer></script>
+<script src="script/infinity-ordinal.js" defer></script>
 
 <title>增量进化</title>
 </head>
@@ -39,11 +44,26 @@
 <span id="infinity number" style="color:#00ff00;"></span>
 <span id="infinity time"></span>
 </p>
+<p id="eternityN" style="display: block;">
+达到<span id="eternity requirement"></span>无限点数可进入永恒。<br />
+</p>
+<p id="eternityY" style="display: none;color:#0000ff;">
+<input type="button" value="进入永恒" onclick="eternity()" style="background-color:#0000ff;">
+你将获得<span id="eternity number get"></span>永恒点数。
+</p>
+<p>
+<span id="eternity number" style="color:#0000ff;"></span>
+<span id="eternity time"></span>
+</p>
 <p>
 <input type="button" onclick="setTab('normal')" value="普通生成器">
 <input type="button" onclick="setTab('autobuyer')" value="自动购买">
 <input type="button" onclick="setTab('normal_upgrade')" value="普通升级">
-<input type="button" onclick="setTab('infinity_upgrade')" value="无限升级" style="background-color:#00ff00;display:none" id="infinity_upgrade_tab">
+<input type="button" onclick="setTab('normal_challenge')" value="普通挑战" style="display: none;" id="normal_challenge_tab">
+<input type="button" onclick="setTab('infinity_upgrade')" value="无限升级" style="background-color:#00ff00;display:none;" id="infinity_upgrade_tab">
+<input type="button" onclick="setTab('infinity_generator')" value="无限生成器" style="background-color:#00ff00;display:none;" id="infinity_generator_tab">
+<input type="button" onclick="setTab('infinity_challenge')" value="无限挑战" style="background-color:#00ff00;display: none;" id="infinity_challenge_tab">
+<input type="button" onclick="setTab('ordinal')" value="序数" style="background-color:#00ff00;display: none;" id="ordinal_tab">
 <input type="button" onclick="setTab('achievements')" value="成就">
 <input type="button" onclick="setTab('option')" value="杂项">
 
@@ -55,7 +75,8 @@
 <input type="button" value="+1" id="manual" />
 <input type="hidden" value="Max All" onclick="maxAllNormalGenerator()" id="max all" />
 </p>
-<p><input type="button" value="cheat" id="cheat" /></p>
+<p><input type="button" value="cheat" id="cheat" style="display: none;"/></p>
+<p><span id="ic2_anti"></span></p>
 <table align="center">
 	<tr>
 		<td class="generator">
@@ -182,10 +203,16 @@
 	当前加速效果：献祭效果^<span id="boost_factor"></span><br />
 	<input type="button" value="加速" onclick="boost()">使指数变为<span id="boost_effect"></span>
 </div>
-
+<p>
+	<span id="sacrifice_softcapped"></span>
+</p>
 </div>
 
 <div id="autobuyer" style="display: none;">
+<p>
+	<input type="button" onclick="autobuygenerator_on()" value="开启全部生成器">
+	<input type="button" onclick="autobuygenerator_off()" value="关闭全部生成器">
+</p>
 <table align="center">
 	<tr>
 		<td class="autobuyer" id="autoNG1" style="display: none;">
@@ -201,35 +228,69 @@
 		<td class="autobuyer" id="autoNG3" style="display: none;">
 			自动购买生成器3：<input type="checkbox" id="autobuygenerator3"><br />
 			批量购买：<input type="checkbox" id="bulkgenerator3"><br />
-			间隔(ms)：<input type="number" id="generatordelay3" value="0"
+			间隔(ms)：<input type="number" id="generatordelay3" value="0">
 		</td>
 		<td class="autobuyer" id="autoNG4" style="display: none;">
 			自动购买生成器4：<input type="checkbox" id="autobuygenerator4"><br />
 			批量购买：<input type="checkbox" id="bulkgenerator4"><br />
-			间隔(ms)：<input type="number" id="generatordelay4" value="0"
+			间隔(ms)：<input type="number" id="generatordelay4" value="0">
 		</td>
 	</tr>
 	<tr>
 		<td class="autobuyer" id="autoNG5" style="display: none;">
 			自动购买生成器5：<input type="checkbox" id="autobuygenerator5"><br />
 			批量购买：<input type="checkbox" id="bulkgenerator5"><br />
-			间隔(ms)：<input type="number" id="generatordelay5" value="0"
+			间隔(ms)：<input type="number" id="generatordelay5" value="0">
 		</td>
 		<td class="autobuyer" id="autoNG6" style="display: none;">
 			自动购买生成器6：<input type="checkbox" id="autobuygenerator6"><br />
 			批量购买：<input type="checkbox" id="bulkgenerator6"><br />
-			间隔(ms)：<input type="number" id="generatordelay6" value="0"
+			间隔(ms)：<input type="number" id="generatordelay6" value="0">
 		</td>
 		<td class="autobuyer" id="autoNG7" style="display: none;">
 			自动购买生成器7：<input type="checkbox" id="autobuygenerator7"><br />
 			批量购买：<input type="checkbox" id="bulkgenerator7"><br />
-			间隔(ms)：<input type="number" id="generatordelay7" value="0"
+			间隔(ms)：<input type="number" id="generatordelay7" value="0">
 		</td>
 		<td class="autobuyer" id="autoNG8" style="display: none;">
 			自动购买生成器8：<input type="checkbox" id="autobuygenerator8"><br />
 			批量购买：<input type="checkbox" id="bulkgenerator8"><br />
-			间隔(ms)：<input type="number" id="generatordelay8" value="0"
+			间隔(ms)：<input type="number" id="generatordelay8" value="0">
 		</td>
+	</tr>
+	<tr>
+		<td class="autobuyer" id="auto_sacrifice" style="display: none;">
+			自动献祭：<input type="checkbox" id="auto_sacrifice_checkbox"><br />
+			模式：
+			<select id="auto_sacrifice_mode">
+				<option value="time">时间</option>
+				<option value="multi">效果倍增</option>
+				<option value="increment">效果提升</option>
+			</select><br />
+			<input type="number" id="auto_sacrifice_parameter" value="0">
+		</td>
+		<td class="autobuyer" id="auto_boost" style="display: none;">
+			自动加速：<input type="checkbox" id="auto_boost_checkbox"><br />
+			模式：
+			<select id="auto_boost_mode">
+				<option value="time">时间</option>
+				<option value="multi">效果倍增</option>
+				<option value="increment">效果提升</option>
+			</select><br />
+			<input type="number" id="auto_boost_parameter" value="0">
+		</td>
+		<td class="autobuyer" id="auto_infinity" style="display: none;">
+			自动无限：<input type="checkbox" id="auto_infinity_checkbox"><br />
+			模式：
+			<select id="auto_infinity_mode">
+				<option value="time">时间</option>
+				<option value="multi">上次的倍数</option>
+				<option value="totalmulti">总量的倍数</option>
+				<option value="amount">数量</option>
+			</select><br />
+			<input type="number" id="auto_infinity_parameter" value="0">
+		</td>
+
 	</tr>
 </table>
 </div>
@@ -240,28 +301,29 @@
   <tr>
     <td id="nu1">
     一阶生成器产量*3。<br />
-    <input type="button" onclick="nu1()" value="1000点数" id="nu1b">
+    <input type="button" onclick="nu1()" value="1e3点数" id="nu1b">
     </td>
     <td id="nu2">
     所有生成器速度提升30%。<br />
-    <input type="button" onclick="nu2()" value="100000点数" id="nu2b">
+    <input type="button" onclick="nu2()" value="1e5点数" id="nu2b">
     </td>
     <td id="nu3">
     解锁购买最大生成器。<br />
-    <input type="button" onclick="nu3()" value="10000000点数" id="nu3b">
+    <input type="button" onclick="nu3()" value="1e7点数" id="nu3b">
     </td>
   </tr>
   <tr>
     <td id="nu4">
     五阶生成器产量*5。<br />
-    <input type="button" onclick="nu4()" value="10000000000点数" id="nu4b">
+    <input type="button" onclick="nu4()" value="1e10点数" id="nu4b">
     </td>
     <td id="nu5">
     所有生成器速度*2。<br />
-    <input type="button" onclick="nu5()" value="100000000000000点数" id="nu5b">
+    <input type="button" onclick="nu5()" value="1e14点数" id="nu5b">
     </td>
     <td id="nu6">
     所有生成器速度根据点数提升。<br />
+    (x<span id="nu6_effect"></span>)<br />
     <input type="button" onclick="nu6()" value="1e20点数" id="nu6b">
     </td>
   </tr>
@@ -293,8 +355,398 @@
 
 </div>
 
+<div id="normal_challenge" style="display: none;">
+	<p>提示：这些挑战不是按照难度顺序排列的。达到无限需求后退出挑战即可完成挑战。</p>
+	<table align="center">
+		<tr>
+			<td id="nc1">
+				普通挑战1<br />
+				除了一阶生成器之外所有生成器倍率强制为1，但一阶生成器倍率^5<br />
+				<input type="button" onclick="nc(1)" value="开始挑战" id="nc1b"><br />
+				奖励：一阶生成器数量提升一阶生成器产量(x<span id="nc1_effect"></span>)<br />
+			</td>
+			<td id="nc2">
+				普通挑战2<br />
+				所有普通生成器花费^2<br />
+				<input type="button" onclick="nc(2)" value="开始挑战" id="nc2b"><br />
+				奖励：二阶生成器数量提升二阶生成器产量(x<span id="nc2_effect"></span>)<br />
+			</td>
+		</tr>
+		<tr>
+			<td id="nc3">
+				普通挑战3<br />
+				三阶生成器倍率强制为0，但是一开始就能献祭，且不重置二阶生成器<br />且献祭效果^6<br />
+				<input type="button" onclick="nc(3)" value="开始挑战" id="nc3b"><br />
+				奖励：三阶生成器数量提升三阶生成器产量(x<span id="nc3_effect"></span>)<br />
+			</td>
+			<td id="nc4">
+				普通挑战4<br />
+				所有普通生成器倍率^0.5<br />
+				<input type="button" onclick="nc(4)" value="开始挑战" id="nc4b"><br />
+				奖励：四阶生成器数量提升四阶生成器产量(x<span id="nc4_effect"></span>)<br />
+			</td>
+		</tr>
+		<tr>
+			<td id="nc5">
+				普通挑战5<br />
+				禁用普通升级1245678<br />
+				<input type="button" onclick="nc(5)" value="开始挑战" id="nc5b"><br />
+				奖励：五阶生成器数量提升五阶生成器产量(x<span id="nc5_effect"></span>)<br />
+			</td>
+			<td id="nc6">
+				普通挑战6<br />
+				当第66次购买普通生成器时，你将会退出此挑战。<br />
+				<input type="button" onclick="nc(6)" value="开始挑战" id="nc6b"><br />
+				奖励：六阶生成器数量提升六阶生成器产量(x<span id="nc6_effect"></span>)<br />
+			</td>
+		</tr>
+		<tr>
+			<td id="nc7">
+				普通挑战7<br />
+				普通生成器产量从0开始随时间提升（倍数小于1）<br />
+				<input type="button" onclick="nc(7)" value="开始挑战" id="nc7b"><br />
+				奖励：七阶生成器数量提升七阶生成器产量(x<span id="nc7_effect"></span>)<br />
+			</td>
+			<td id="nc8">
+				普通挑战8<br />
+				购买普通生成器时重置低于它的所有普通生成器及点数<br />
+				<input type="button" onclick="nc(8)" value="开始挑战" id="nc8b"><br />
+				奖励：八阶生成器数量提升八阶生成器产量(x<span id="nc8_effect"></span>)<br />
+			</td>
+		</tr>
+		<tr>
+			<td id="nc9">
+				普通挑战9<br />
+				禁用献祭<br />
+				<input type="button" onclick="nc(9)" value="开始挑战" id="nc9b"><br />
+				奖励：自动献祭
+			</td>
+			<td id="nc10">
+				普通挑战10<br />
+				一阶生成器^0.9,二阶生成器^0.8……献祭效果^0.1，禁用加速<br />
+				<input type="button" onclick="nc(10)" value="开始挑战" id="nc10b"><br />
+				奖励：自动加速
+			</td>
+		</tr>
+		<tr>
+			<td id="nc11">
+				普通挑战11<br />
+				无限需求提升<br />
+				<input type="button" onclick="nc(11)" value="开始挑战" id="nc11b"><br />
+				奖励：自动无限
+			</td>
+			<td id="nc12">
+				普通挑战12<br />
+				普通生成器倍数随时间衰减<br />
+				<input type="button" onclick="nc(12)" value="开始挑战" id="nc12b"><br />
+				奖励：无限能量效果指数提升0.5
+			</td>
+		</tr>
+	</table>
+	<p>
+		完成所有普通挑战后，将解锁无限挑战。
+	</p>
+</div>
+
 <div id="infinity_upgrade" style="display: none;">
-	
+	<table align="center">
+		<tr>
+	    <td id="iu1">
+	    解锁普通挑战。<br />
+	    <input type="button" onclick="iu1()" value="1无限点数" id="iu1b">
+	    </td>
+	    <td id="iu2">
+	    解锁无限生成器。<br />
+	    <input type="button" onclick="iu2()" value="1无限点数" id="iu2b">
+	    </td>
+	    <td id="iu3">
+	    根据无限次数提升普通生成器效果。<br />
+	    (x<span id="iu3_effect"></span>)<br />
+	    <input type="button" onclick="iu3()" value="1无限点数" id="iu3b">
+	    </td>
+	  </tr>
+	  <tr>
+	    <td id="iu4">
+	    加速后保留10点数。<br />
+	    <input type="button" onclick="iu4()" value="1无限点数" id="iu4b">
+	    </td>
+	    <td id="iu5">
+	    无限后保留10点数。<br />
+	    <input type="button" onclick="iu5()" value="10无限点数" id="iu5b">
+	    </td>
+	    <td id="iu6">
+	    无限后保留普通升级。<br />
+	    <input type="button" onclick="iu6()" value="100无限点数" id="iu6b">
+	    </td>
+	  </tr>
+	  <tr>
+	    <td id="iu7">
+	    根据当前无限点数提升普通生成器效果。<br />
+	    (x<span id="iu7_effect"></span>)<br />
+	    <input type="button" onclick="iu7()" value="3无限点数" id="iu7b">
+	    </td>
+	    <td id="iu8">
+	    根据在当前无限中经过的时间提升普通生成器效果。<br />
+	    (x<span id="iu8_effect"></span>)<br />
+	    <input type="button" onclick="iu8()" value="5无限点数" id="iu8b">
+	    </td>
+	    <td id="iu9">
+	    根据完成的普通挑战数量提升普通生成器效果。<br />
+	    (x<span id="iu9_effect"></span>)<br />
+	    <input type="button" onclick="iu9()" value="100无限点数" id="iu9b">
+	    </td>
+	  </tr>
+	  <tr>
+	    <td id="iu10">
+	    购买普通生成器的乘数提升0.3。<br />
+	    <input type="button" onclick="iu10()" value="10无限点数" id="iu10b">
+	    </td>
+	    <td id="iu11">
+	    献祭效果提升0.3倍。（加算）<br />
+	    <input type="button" onclick="iu11()" value="10无限点数" id="iu11b">
+	    </td>
+	    <td id="iu12">
+	    加速效果+3<br />
+	    <input type="button" onclick="iu12()" value="10无限点数" id="iu12b">
+	    </td>
+	  </tr>
+	</table>
+</div>
+
+<div id="infinity_generator" style="display: none;">
+	<p>
+		你现在有<span id="infinity_power"></span>无限能量，
+		提升所有普通生成器<span id="infinity_power_effect"></span>x效果，
+		同时提升加速效果<span id="infinity_power_effect2"></span>。
+	</p>
+	<p>
+	<input type="button" value="Max All" onclick="maxAllinfinityGenerator()"/>
+	</p>
+	<table align="center">
+		<tr>
+			<td class="generator">
+			一阶无限生成器
+			</td>
+			<td class="generator">
+			(<span id="infinitygenerator1"></span>)
+			</td>
+			<td class="generator">
+			x<span id="infinitygeneratormultiplyer1"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyinfinitygenerator(1)" id="buyIG1">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			二阶无限生成器
+			</td>
+			<td class="generator">
+			(<span id="infinitygenerator2"></span>)
+			</td>
+			<td class="generator">
+			x<span id="infinitygeneratormultiplyer2"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyinfinitygenerator(2)" id="buyIG2">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			三阶无限生成器
+			</td>
+			<td class="generator">
+			(<span id="infinitygenerator3"></span>)
+			</td>
+			<td class="generator">
+			x<span id="infinitygeneratormultiplyer3"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyinfinitygenerator(3)" id="buyIG3">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			四阶无限生成器
+			</td>
+			<td class="generator">
+			(<span id="infinitygenerator4"></span>)
+			</td>
+			<td class="generator">
+			x<span id="infinitygeneratormultiplyer4"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyinfinitygenerator(4)" id="buyIG4">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			五阶无限生成器
+			</td>
+			<td class="generator">
+			(<span id="infinitygenerator5"></span>)
+			</td>
+			<td class="generator">
+			x<span id="infinitygeneratormultiplyer5"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyinfinitygenerator(5)" id="buyIG5">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			六阶无限生成器
+			</td>
+			<td class="generator">
+			(<span id="infinitygenerator6"></span>)
+			</td>
+			<td class="generator">
+			x<span id="infinitygeneratormultiplyer6"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyinfinitygenerator(6)" id="buyIG6">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			七阶无限生成器
+			</td>
+			<td class="generator">
+			(<span id="infinitygenerator7"></span>)
+			</td>
+			<td class="generator">
+			x<span id="infinitygeneratormultiplyer7"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyinfinitygenerator(7)" id="buyIG7">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			八阶无限生成器
+			</td>
+			<td class="generator">
+			(<span id="infinitygenerator8"></span>)
+			</td>
+			<td class="generator">
+			x<span id="infinitygeneratormultiplyer8"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyinfinitygenerator(8)" id="buyIG8">
+			</td>
+		</tr>
+	</table>
+
+</div>
+
+<div id="infinity_challenge" style="display: none;">
+	<table align="center">
+		<tr>
+			<td id="ic1">
+				无限挑战1<br />
+				无法生产无限能量。<br />
+				目标：1e3850点数。<br />
+				<input type="button" onclick="ic(1)" value="开始挑战" id="ic1b"><br />
+				奖励：无限能量提升加速效果。<br />
+			</td>
+			<td id="ic2">
+				无限挑战2<br />
+				当拥有二阶生成器时，反点数开始指数增长，<br />且一阶生成器产量除以反点数。<br />
+				目标：1e4000点数。<br />
+				<input type="button" onclick="ic(2)" value="开始挑战" id="ic2b"><br />
+				奖励：一阶无限生成器数量提升八阶生成器产量(x<span id="ic2_effect"></span>)
+			</td>
+		</tr>
+		<tr>
+			<td id="ic3">
+				无限挑战3<br />
+				禁用献祭，但购买乘数+1<br />
+				目标：1e1500点数。<br />
+				<input type="button" onclick="ic(3)" value="开始挑战" id="ic3b"><br />
+				奖励：削弱献祭效果软上限。
+			</td>
+			<td id="ic4">
+				无限挑战4<br />
+				点数削弱生成器产量<br />
+				目标：1e5800点数。<br />
+				<input type="button" onclick="ic(4)" value="开始挑战" id="ic4b"><br />
+				奖励：点数提升无限生成器产量。(x<span id="ic4_effect"></span>)
+			</td>
+		</tr>
+		<tr>
+			<td id="ic5">
+				无限挑战5<br />
+				每次献祭都会降低之后的献祭效果.<br />
+				目标：1e6000点数。<br />
+				<input type="button" onclick="ic(5)" value="开始挑战" id="ic5b"><br />
+				奖励：加速效果以乘法提升无限生成器产量。
+			</td>
+			<td id="ic6">
+				无限挑战6<br />
+				所有生成器产量^0.1<br />
+				目标：1e150点数。<br />
+				<input type="button" onclick="ic(6)" value="开始挑战" id="ic6b"><br />
+				奖励：无限能量效果指数+0.5
+			</td>
+		</tr>
+		<tr>
+			<td id="ic7">
+				无限挑战7<br />
+				每次购买的乘数强制为1<br />
+				目标：1e2600点数。<br />
+				<input type="button" onclick="ic(7)" value="开始挑战" id="ic7b"><br />
+				奖励：提升购买乘数+0.5
+			</td>
+			<td id="ic8">
+				无限挑战8<br />
+				购买生成器会提升所有生成器费用<br />
+				目标：1e3000点数。<br />
+				<input type="button" onclick="ic(8)" value="开始挑战" id="ic8b"><br />
+				奖励：生成器购买总次数提升生成器产出(x<span id="ic8_effect"></span>)
+			</td>
+		</tr>
+	</table>
+	<p>
+		完成所有无限挑战后，将解锁序数。
+	</p>
+</div>
+
+<div id="ordinal" style="display: none;">
+	<p>
+		你有<span id="ordinal_number"></span>序数，基数为<span id="ordinal_base"></span>。<br />
+		你当前有<span id="ordinal_power"></span>序数能量，使无限生成器速度x<span id="ordinal_effect"></span>。<br />
+		<input type="button" onclick="get_ord_number()" value="点击">产生<span id="ordinal_number_get"></span>序数。<br />
+		<input type="button" onclick="get_ord_power()" value="点击">重置序数，序数能量变为<span id="ordinal_power_get"></span>。<br />
+		你有<span id="ordinal_essence"></span>序数精华，提升序数效果为^<span id="ordinal_essence_effect"></span>（初始^8）。<br />
+	</p>
+	<table align="center">
+		<tr>
+			<td>
+				点击序数提升+1<br />
+				<input type="button" id="ou1" onclick="ou1()">
+			</td>
+			<td>
+				点击序数乘数+1<br />
+				<input type="button" id="ou2" onclick="ou2()">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				点击序数乘方+1<br />
+				<input type="button" id="ou3" onclick="ou3()">
+			</td>
+			<td>
+				基数-1<br />
+				<input type="button" id="ou4" onclick="ou4()">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				获得序数精华<br />
+				<input type="button" id="ou5" onclick="ou5()" value="需要过大序数能量">
+			</td>
+		</tr>
+	</table>
 </div>
 
 <div id="option" style="display: none;">
@@ -304,13 +756,25 @@
 本游戏模仿<a href="http://ivark.github.io/" target="_blank">《反物质维度》</a>和<a href="https://dan-simon.github.io/misc/fe000000/" target="_blank">《FE000000》</a>制作，你可以点击链接来玩它们。<br />
 调整tick间隔（量力而行！）<input type="range" id="delay" value="1.7" min="1.5" max="2.3" step="0.01"><span id="delaytext"></span>
 <input type="button" value="确认修改" onclick="changedelay()"><br />
-
+调整有效数字位数：
+<input type="number" step="1" min="1" value="4" id="precision"><br />
+献祭时确认：<input type="checkbox" id="sacrifice_confirm" checked="true"><br />
+加速时确认：<input type="checkbox" id="boost_confirm" checked="true"><br />
+无限时确认：<input type="checkbox" id="infinity_confirm" checked="true"><br />
 </p>
 </div>
 <div style="width:33%;float:left;">
 <p>
 更新履历<br />
-
+v0.1.10 2023-4-23 新增一些显示项目。<br />
+v0.1.9 2023-4-23 更新“序数”。<br />
+v0.1.8 2023-4-20 新增调整有效数字的功能。<br />
+v0.1.7 2023-4-20 更新“无限挑战”。<br />
+v0.1.6 2023-4-16 更新“无限升级”，并添加了一个软上限。<br />
+v0.1.5 2023-4-15 更新“普通挑战”。<br />
+v0.1.4 2023-4-7 制作了是否开启重置时确认的选项。<br />
+v0.1.3 2023-4-6 更新“无限生成器”。<br />
+v0.1.2 2023-4-6 制作了无限升级的雏形。<br />
 v0.1.1 2023-3-30 更新“进入无限”！终于做出了第一个重置层。<br />
 v0.0.12 2023-3-30 更新“加速”。<br />
 v0.0.11 2023-3-30 更新“献祭”。<br />
@@ -381,18 +845,41 @@ import:
 		<span class="notification-text">完成成就：去睡一觉</span>
 	</div>
 	<div class="notification" id="notificationach13">
-		<span class="notification-text">完成成就：</span>
+		<span class="notification-text">完成成就：挑战开始</span>
 	</div>
 	<div class="notification" id="notificationach14">
-		<span class="notification-text">完成成就：</span>
+		<span class="notification-text">完成成就：另一组生成器</span>
 	</div>
 	<div class="notification" id="notificationach15">
-		<span class="notification-text">完成成就：</span>
+		<span class="notification-text">完成成就：我不喜欢软上限</span>
 	</div>
 	<div class="notification" id="notificationach16">
-		<span class="notification-text">完成成就：</span>
+		<span class="notification-text">完成成就：感受暴涨</span>
 	</div>
-	
+	<div class="notification" id="notificationach17">
+		<span class="notification-text">完成成就：无限能量有用吗？</span>
+	</div>
+	<div class="notification" id="notificationach18">
+		<span class="notification-text">完成成就：生成器刺客</span>
+	</div>
+	<div class="notification" id="notificationach19">
+		<span class="notification-text">完成成就：没有技术含量</span>
+	</div>
+	<div class="notification" id="notificationach20">
+		<span class="notification-text">完成成就：这不是序数增量</span>
+	</div>	
+	<div class="notification" id="notificationach21">
+		<span class="notification-text">完成成就：弹指无限</span>
+	</div>
+	<div class="notification" id="notificationach22">
+		<span class="notification-text">完成成就：ω到底在哪？</span>
+	</div>
+	<div class="notification" id="notificationach23">
+		<span class="notification-text">完成成就：重新开始</span>
+	</div>
+	<div class="notification" id="notificationach24">
+		<span class="notification-text">完成成就：还不是时候</span>
+	</div>
 </div>
 <div id="achievements" style="display: none;">
 <table align="center">
@@ -448,22 +935,55 @@ import:
     	<span class="tooltip-text">离线至少28800秒再上线。</span>
     </td>
     <td class="achNO" id="ach13">
-    	
-    	<span class="tooltip-text"></span>
+    	挑战开始
+    	<span class="tooltip-text">完成一个普通挑战。</span>
     </td>
     <td class="achNO" id="ach14">
-    	
-    	<span class="tooltip-text"></span>
+    	另一组生成器
+    	<span class="tooltip-text">购买一阶无限生成器。</span>
     </td>
     <td class="achNO" id="ach15">
-    	
-    	<span class="tooltip-text"></span>
+    	我不喜欢软上限
+    	<span class="tooltip-text">献祭效果达到1e100。</span>
     </td>
     <td class="achNO" id="ach16">
-    	
-    	<span class="tooltip-text"></span>
+    	感受暴涨
+    	<span class="tooltip-text">购买无限升级6。</span>
     </td>
-
+  </tr>
+  <tr>
+    <td class="achNO" id="ach9">
+    	无限能量有用吗？
+    	<span class="tooltip-text">完成无限挑战1。</span>
+    </td>
+    <td class="achNO" id="ach10">
+    	生成器刺客
+    	<span class="tooltip-text">拥有1000个以上八阶生成器时购买单个八阶生成器。</span>
+    </td>
+    <td class="achNO" id="ach11">
+    	没有技术含量
+    	<span class="tooltip-text">完成无限挑战8。</span>
+    </td>
+    <td class="achNO" id="ach12">
+    	这不是序数增量
+    	<span class="tooltip-text">点击产生序数。</span>
+    </td>
+    <td class="achNO" id="ach13">
+    	弹指无限
+    	<span class="tooltip-text">在0.25秒内无限。</span>
+    </td>
+    <td class="achNO" id="ach14">
+    	ω到底在哪？
+    	<span class="tooltip-text">购买基数-1。</span>
+    </td>
+    <td class="achNO" id="ach15">
+    	重新开始
+    	<span class="tooltip-text">购买序数精华。</span>
+    </td>
+    <td class="achNO" id="ach16">
+    	还不是时候
+    	<span class="tooltip-text">加速效果达到^4000。</span>
+    </td>
   </tr>
 </table>
 </div>

@@ -92,3 +92,6 @@ position:relative;
   font-size: 20px;
   cursor: pointer;
 }
+input{
+ border-radius: 5px;
+}

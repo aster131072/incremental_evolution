@@ -1,6 +1,31 @@
-game = {
+let game = {
 	"ach": [0,0,0,0,0,0,0,0,
+					0,0,0,0,0,0,0,0,
 					0,0,0,0,0,0,0,0],
+	"confirmconfig":{
+		"sacrifice":true,
+		"boost":true,
+		"infinity":true
+	},
+	"automator":{
+		"sacrifice":{
+			"checked":false,
+			"mode":"time",
+			"timer":0,
+			"parameter":0
+		},
+		"boost":{
+			"checked":false,
+			"mode":"time",
+			"timer":0,
+			"parameter":0
+		},
+		"infinity":{
+			"checked":false,
+			"mode":"time",
+			"parameter":0
+		}
+	},
 	"normal":{
 		"number":0,
 		"upgrades":[0,0,0,0,0,0,0,0,0,0,0],
@@ -18,6 +43,14 @@ game = {
 			"timer":[0,0,0,0,0,0,0,0],
 			"autodelay":[0,0,0,0,0,0,0,0]
 		},
+		"challenged":[0,0,0,0,0,0,0,0,0,0,0,0],
+		"inchallenge":[0,0,0,0,0,0,0,0,0,0,0,0],//12个
+		"challenge":{
+			"nc6_counter":0,
+			"nc7_factor":0,
+			"nc12_factor":0,
+			"nc_timer":0
+		},
 		"sacrifice":1,
 		"boost":1
 	},
@@ -29,7 +62,8 @@ game = {
 		"totalnumber":0,
 		"infinities":0,
 		"lastnumber":0,
-		"hasinfinitied":false,
+		"speed":1,
+		"multiplier":2,
 		"generators":{
 			"amount":[0,0,0,0,0,0,0,0],
 			"bought":[0,0,0,0,0,0,0,0],
@@ -41,11 +75,59 @@ game = {
 			"bulkbuy":[false,false,false,false,false,false,false,false],
 			"autodelay":[0,0,0,0,0,0,0,0]
 		},
-		"power":0
+		"power":0,
+		"upgrades":[0,0,0,0,0,0,0,0,0,0,0,0],//12个
+		"challenged":[0,0,0,0,0,0,0,0],
+		"inchallenge":[0,0,0,0,0,0,0,0],
+		"challenge":{
+			"ic2_anti":1,
+			"ic5_times":0
+		},
+		"ordinal":{
+			"number":0,
+			"power":0,
+			"base":10,
+			"essence":0,
+			"upgrade":{
+				"plus":1,
+				"multi":1,
+				"power":1
+			}
+		},
+		"hasinfinitied":false
+	},
+	"eternity":{
+		"starttime":0,
+		"timespent":0,
+		"requirement":1e308,
+		"number":0,
+		"totalnumber":0,
+		"eternities":0,
+		"lastnumber":0,
+		"speed":1,
+		"multiplier":2,
+		"generators":{
+			"amount":[0,0,0,0,0,0,0,0],
+			"bought":[0,0,0,0,0,0,0,0],
+			"price":[10,100,1e4,1e6,1e9,1e13,1e18,1e24],
+			"scale":[1e3,1e4,1e5,1e6,1e8,1e10,1e12,1e15],
+			"actuallprice":[0,0,0,0,0,0,0,0],
+			"factor":[1,1,1,1,1,1,1,1],
+			"autobuyer":[false,false,false,false,false,false,false,false],
+			"bulkbuy":[false,false,false,false,false,false,false,false],
+			"autodelay":[0,0,0,0,0,0,0,0]
+		},
+		"power":0,
+		"upgrades":[0,0,0,0,0,0,0,0,0,0,0,0],//12个
+		"challenged":[0,0,0,0,0,0,0,0],
+		"inchallenge":[0,0,0,0,0,0,0,0],
+		"haseternitied":false
 	},
 	"time": 0,
 	"starttime":0,
+	"precision":4,
 	"delay": 50
 };
 game.infinity.requirement=ExpantaNum.pow(2,256);
+game.eternity.requirement=ExpantaNum.pow(2,1024);
 originalgame = game;
