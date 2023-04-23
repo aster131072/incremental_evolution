@@ -436,21 +436,23 @@ document.getElementById("normal number").innerHTML=ExpantaNum.floor(game.normal.
 getAchievement(1);
 }
 document.getElementById("cheat").onclick = () =>{
-game.normal.number=ExpantaNum(game.normal.number).add(10);
-game.infinity.number=ExpantaNum(game.infinity.number).add(1e70);
-game.infinity.infinities=100;
-game.normal.upgrades=[1,1,1,1,1,1,1,1,1,1,1];
-game.infinity.upgrades=[1,1,1,1,1,1,1,1,1,5,5,5];
-game.normal.generators.autobuyer=[true,true,true,true,true,true,true,true];
-game.normal.challenged=[1,1,1,1,1,1,1,1,1,1,1,1];
-game.infinity.challenged=[1,1,1,1,1,1,1,1];
+//game.normal.number=ExpantaNum(game.normal.number).add(10);
+game.infinity.number=1;
+game.infinity.infinities=1;
+//game.normal.upgrades=[1,1,1,1,1,1,1,1,1,1,1];
+//game.infinity.upgrades=[1,1,1,1,1,1,1,1,1,5,5,5];
+//game.normal.generators.autobuyer=[true,true,true,true,true,true,true,true];
+//game.normal.challenged=[1,1,1,1,1,1,1,1,1,1,1,1];
+//game.infinity.challenged=[1,1,1,1,1,1,1,1];
 game.infinity.hasinfinitied=true;
+/*
 	if(gameSpeed==1){
 		gameSpeed=1000;
 	}
 	else{
 		gameSpeed=1;
 	}
+	*/
 }
 
 let logdelay;
