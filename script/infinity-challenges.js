@@ -14,7 +14,7 @@ function ic(i){
 			document.getElementById("ic"+i).style.backgroundColor="#00ff00";
 			game.infinity.challenged[i-1]=1;
 			if(i==1) getAchievement(17);
-			if(i==1) getAchievement(19);
+			if(i==8) getAchievement(19);
 		}
 		infinity();
 		if(i==2) document.getElementById("ic2_anti").innerHTML="";
