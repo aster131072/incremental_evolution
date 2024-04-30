@@ -22,3 +22,11 @@ infinity_checkbox.addEventListener("input", function() {
 		game.confirmconfig.infinity=false;
 	}
 });
+const eternity_checkbox = document.getElementById("eternity_confirm");
+eternity_checkbox.addEventListener("input", function() {
+	if(eternity_checkbox.checked){
+		game.confirmconfig.eternity=true;
+	}else{
+		game.confirmconfig.eternity=false;
+	}
+});

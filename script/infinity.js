@@ -1,6 +1,6 @@
 function infinity(){
 	let infinity_confirmation = true;
-	if(game.confirmconfig.infinity){
+	if(game.confirmconfig.infinity&&game.normal.inchallenge.indexOf(1) === -1&&game.infinity.inchallenge.indexOf(1) === -1){
 		infinity_confirmation = confirm("你真的要进入无限吗？这会重置你之前的几乎一切进度！");
 	}
 	if(infinity_confirmation==true){
@@ -10,9 +10,10 @@ function infinity(){
 			game.infinity.totalnumber=ExpantaNum(game.infinity.totalnumber).add(game.infinity.lastnumber);
 			game.infinity.infinities=ExpantaNum(game.infinity.infinities).add(1);
 			getAchievement(11);
-			if(ExpantaNum(game.infinity.timespent).lt(250)) getAchievement(21);
+			if(ExpantaNum(game.infinity.timespent).lt(250)&&game.infinity.hasinfinitied) getAchievement(21);
 		}
-
+		if(game.eternity.inchallenge[0]==1) ec(1);
+		
 		game.normal.generators.amount=[0,0,0,0,0,0,0,0];
 		game.normal.generators.bought=[0,0,0,0,0,0,0,0];
 		game.normal.number=0;
@@ -23,7 +24,10 @@ function infinity(){
 		get_boost=1;
 		document.getElementById("sacrifice_factor").innerHTML=1;
 		document.getElementById("boost_factor").innerHTML=1;
-		for(let i=0;i<8;i++) game.infinity.generators.amount[i]=game.infinity.generators.bought[i];
+		if(game.eternity.milestones[14]==0) {
+			for(let i=0;i<8;i++) game.infinity.generators.amount[i]=game.infinity.generators.bought[i];
+		}
+		
 		game.infinity.power=0;
 		if(game.infinity.upgrades[5]==0) {
 			game.normal.upgrades=[0,0,0,0,0,0,0,0,0,0,0];
@@ -54,5 +58,4 @@ function infinity(){
 		game.infinity.hasinfinitied=true;
 		
 	}
-	infinity_confirmation==false;
 }

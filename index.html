@@ -3,7 +3,7 @@
 <head>
 <link rel="stylesheet" type="text/css" href="mystyle.css">
 <meta charset="utf-8">
-<meta name="author" content="aster">
+<meta name="author" content="qq:aster/tieba:challenge20168">
 <script src="script/ExpantaNum.js" defer></script>
 <script src="script/game.js" defer></script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -25,6 +25,13 @@
 <script src="script/infinity-ordinal.js" defer></script>
 <script src="script/eternity.js" defer></script>
 <script src="script/eternity-milestones.js" defer></script>
+<script src="script/eternity-generators.js" defer></script>
+<script src="script/eternity-upgrades.js" defer></script>
+<script src="script/eternity-producer.js" defer></script>
+<script src="script/eternity-challenges.js" defer></script>
+<script src="script/eternity-timespace.js" defer></script>
+<script src="script/annihilation.js" defer></script>
+
 
 <title>增量进化</title>
 </head>
@@ -57,6 +64,17 @@
 <span id="eternity number" style="color:#0000ff;"></span>
 <span id="eternity time"></span>
 </p>
+<p id="annihilationN" style="display: block;">
+达到<span id="annihilation requirement"></span>永恒点数可湮灭。<br />
+</p>
+<p id="annihilationY" style="display: none;color:#8000ff;">
+<input type="button" value="湮灭" onclick="annihilation()" style="background-color:#8000ff;">
+你将获得<span id="annihilation number get"></span>湮灭点数。
+</p>
+<p>
+<span id="annihilation number" style="color:#8000ff;"></span>
+<span id="annihilation time"></span>
+</p>
 <p>
 <input type="button" onclick="setTab('normal')" value="普通生成器">
 <input type="button" onclick="setTab('autobuyer')" value="自动购买">
@@ -66,8 +84,15 @@
 <input type="button" onclick="setTab('infinity_generator')" value="无限生成器" style="background-color:#00ff00;display:none;" id="infinity_generator_tab">
 <input type="button" onclick="setTab('infinity_challenge')" value="无限挑战" style="background-color:#00ff00;display: none;" id="infinity_challenge_tab">
 <input type="button" onclick="setTab('ordinal')" value="序数" style="background-color:#00ff00;display: none;" id="ordinal_tab">
+<input type="button" onclick="setTab('eternity_milestone')" value="永恒里程碑" style="background-color:#0000ff;display: none;" id="eternity_milestone_tab">
+<input type="button" onclick="setTab('eternity_generator')" value="永恒生成器" style="background-color:#0000ff;display: none;" id="eternity_generator_tab">
+<input type="button" onclick="setTab('eternity_upgrade')" value="永恒升级" style="background-color:#0000ff;display: none;" id="eternity_upgrade_tab">
+<input type="button" onclick="setTab('eternity_producer')" value="永恒工厂" style="background-color:#0000ff;display: none;" id="eternity_producer_tab">
+<input type="button" onclick="setTab('eternity_challenge')" value="永恒挑战" style="background-color:#0000ff;display: none;" id="eternity_challenge_tab">
+<input type="button" onclick="setTab('eternity_timespace')" value="时空" style="background-color:#0000ff;display: none;" id="eternity_timespace_tab">
 <input type="button" onclick="setTab('achievements')" value="成就">
 <input type="button" onclick="setTab('option')" value="杂项">
+
 
 </p>
 
@@ -206,7 +231,12 @@
 	<input type="button" value="加速" onclick="boost()">使指数变为<span id="boost_effect"></span>
 </div>
 <p>
-	<span id="sacrifice_softcapped"></span>
+<span id="sacrifice_softcapped"></span><br id="sacrifice_softcapped2_br" />
+<span id="sacrifice_softcapped2" style="color:#00ff00;"></span><br id="sacrifice_softcapped3_br" />
+<span id="sacrifice_softcapped3" style="color:#0000ff;"></span><br />
+<span id="boost_softcapped"></span><br id="boost_softcapped2_br" />
+<span id="boost_softcapped2" style="color:#00ff00;"></span><br id="boost_softcapped3_br" />
+<span id="boost_softcapped3" style="color:#0000ff;"></span><br />
 </p>
 </div>
 
@@ -292,7 +322,22 @@
 			</select><br />
 			<input type="number" id="auto_infinity_parameter" value="0">
 		</td>
-
+		<td class="autobuyer" id="auto_eternity" style="display: none;">
+			自动永恒：<input type="checkbox" id="auto_eternity_checkbox"><br />
+			模式：
+			<select id="auto_eternity_mode">
+				<option value="time">时间</option>
+				<option value="multi">上次的倍数</option>
+				<option value="totalmulti">总量的倍数</option>
+				<option value="amount">数量</option>
+			</select><br />
+			<input type="number" id="auto_eternity_parameter" value="0">
+		</td>
+	</tr>
+	<tr>
+		<td class="autobuyer" id="autoIG" style="display: none;">
+			自动购买无限生成器：<input type="checkbox" id="autobuyinfinitygenerator">
+		</td>
 	</tr>
 </table>
 </div>
@@ -358,7 +403,10 @@
 </div>
 
 <div id="normal_challenge" style="display: none;">
-	<p>提示：这些挑战不是按照难度顺序排列的。达到无限需求后退出挑战即可完成挑战。</p>
+	<p>
+		提示：这些挑战不是按照难度顺序排列的。<br />
+		达到无限需求后退出挑战或进入无限即可完成挑战。
+	</p>
 	<table align="center">
 		<tr>
 			<td id="nc1">
@@ -377,7 +425,7 @@
 		<tr>
 			<td id="nc3">
 				普通挑战3<br />
-				三阶生成器倍率强制为0，但是一开始就能献祭，且不重置二阶生成器<br />且献祭效果^6<br />
+				三阶生成器倍率强制为0，但是献祭不再需要八阶生成器，且不重置二阶生成器<br />且献祭效果^6<br />
 				<input type="button" onclick="nc(3)" value="开始挑战" id="nc3b"><br />
 				奖励：三阶生成器数量提升三阶生成器产量(x<span id="nc3_effect"></span>)<br />
 			</td>
@@ -520,7 +568,9 @@
 		你现在有<span id="infinity_power"></span>无限能量，
 		提升所有普通生成器<span id="infinity_power_effect"></span>x效果，
 		同时提升加速效果<span id="infinity_power_effect2"></span>。
+		
 	</p>
+	<p><span id="infinity_power_softcapped"></span></p>
 	<p>
 	<input type="button" value="Max All" onclick="maxAllinfinityGenerator()"/>
 	</p>
@@ -656,7 +706,8 @@
 				当拥有二阶生成器时，反点数开始指数增长，<br />且一阶生成器产量除以反点数。<br />
 				目标：1e4000点数。<br />
 				<input type="button" onclick="ic(2)" value="开始挑战" id="ic2b"><br />
-				奖励：一阶无限生成器数量提升八阶生成器产量(x<span id="ic2_effect"></span>)
+				奖励：一阶无限生成器数量提升八阶生成器产量(x<span id="ic2_effect"></span>)<br />
+				(上限e100000)
 			</td>
 		</tr>
 		<tr>
@@ -717,9 +768,9 @@
 	<p>
 		你有<span id="ordinal_number"></span>序数，基数为<span id="ordinal_base"></span>。<br />
 		你当前有<span id="ordinal_power"></span>序数能量，使无限生成器速度x<span id="ordinal_effect"></span>。<br />
-		<input type="button" onclick="get_ord_number()" value="点击">产生<span id="ordinal_number_get"></span>序数。<br />
+		<input type="button" onclick="get_ord_number()" value="点击" id="get_ord_number_button">产生<span id="ordinal_number_get"></span>序数。<br />
 		<input type="button" onclick="get_ord_power()" value="点击">重置序数，序数能量变为<span id="ordinal_power_get"></span>。<br />
-		你有<span id="ordinal_essence"></span>序数精华，提升序数效果为^<span id="ordinal_essence_effect"></span>（初始^8）。<br />
+		你有<span id="ordinal_essence"></span><span id="ordinal_essence_from_eternity"></span>序数精华，提升序数效果为^<span id="ordinal_essence_effect"></span>（初始^8）。<br />
 	</p>
 	<table align="center">
 		<tr>
@@ -738,7 +789,7 @@
 				<input type="button" id="ou3" onclick="ou3()">
 			</td>
 			<td>
-				基数-1<br />
+				基数-1(最低2)<br />
 				<input type="button" id="ou4" onclick="ou4()">
 			</td>
 		</tr>
@@ -749,13 +800,516 @@
 			</td>
 		</tr>
 	</table>
+	<p>
+		<span id="ordinal_essence_softcapped"></span><br />
+		<span id="ordinal_essence_softcapped2" style="color:#00ff00;"></span><br />
+		<span id="ordinal_essence_softcapped3" style="color:#0000ff;"></span><br />
+	</p>
+</div>
+
+<div id="eternity_milestone" style="display: none;">
+	<table align="center">
+		<tr>
+			<td id="eternity_milestone_1">
+				永恒1次<br />
+				序数获取*5 且一开始就解锁序数
+			</td>
+			<td id="eternity_milestone_2">
+				永恒2次<br />
+				每次永恒获得一个免费的序数精华
+			</td>
+			<td id="eternity_milestone_3">
+				永恒3次<br />
+				永恒保留普通升级
+			</td>
+			<td id="eternity_milestone_4">
+				永恒4次<br />
+				永恒保留普通挑战
+			</td>
+		</tr>
+		<tr>
+			<td id="eternity_milestone_5">
+				永恒5次<br />
+				永恒不重置序数
+			</td>
+			<td id="eternity_milestone_6">
+				永恒6次<br />
+				永恒保留10点数
+			</td>
+			<td id="eternity_milestone_7">
+				永恒7次<br />
+				献祭不重置任何东西
+			</td>
+			<td id="eternity_milestone_8">
+				永恒8次<br />
+				加速不重置任何东西
+			</td>
+		</tr>
+		<tr>
+			<td id="eternity_milestone_9">
+				永恒9次<br />
+				永恒保留无限升级
+			</td>
+			<td id="eternity_milestone_10">
+				永恒10次<br />
+				解锁永恒生成器
+			</td>
+			<td id="eternity_milestone_11">
+				永恒11次<br />
+				解锁永恒升级
+			</td>
+			<td id="eternity_milestone_12">
+				永恒12次<br />
+				永恒保留无限挑战
+			</td>
+		</tr>
+		<tr>
+			<td id="eternity_milestone_13">
+				永恒13次<br />
+				解锁自动购买无限生成器
+			</td>
+			<td id="eternity_milestone_14">
+				永恒14次<br />
+				解锁自动永恒
+			</td>
+			<td id="eternity_milestone_15">
+				永恒15次<br />
+				无限不重置无限生成器
+			</td>
+			<td id="eternity_milestone_16">
+				永恒16次<br />
+				解锁永恒工厂
+			</td>
+		</tr>
+
+	</table>
+</div>
+
+<div id="eternity_generator" style="display: none;">
+	<p>
+		你现在有<span id="eternity_power"></span>永恒能量，
+		提升所有普通生成器<span id="eternity_power_effect"></span>效果。
+	</p>
+	<p><span id="eternity_power_softcapped"></span></p>
+	<p>
+	<input type="button" value="Max All" onclick="maxAlleternityGenerator()"/>
+	</p>
+	<table align="center">
+		<tr>
+			<td class="generator">
+			一阶永恒生成器
+			</td>
+			<td class="generator">
+			(<span id="eternitygenerator1"></span>)
+			</td>
+			<td class="generator">
+			x<span id="eternitygeneratormultiplyer1"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyeternitygenerator(1)" id="buyEG1">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			二阶永恒生成器
+			</td>
+			<td class="generator">
+			(<span id="eternitygenerator2"></span>)
+			</td>
+			<td class="generator">
+			x<span id="eternitygeneratormultiplyer2"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyeternitygenerator(2)" id="buyEG2">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			三阶永恒生成器
+			</td>
+			<td class="generator">
+			(<span id="eternitygenerator3"></span>)
+			</td>
+			<td class="generator">
+			x<span id="eternitygeneratormultiplyer3"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyeternitygenerator(3)" id="buyEG3">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			四阶永恒生成器
+			</td>
+			<td class="generator">
+			(<span id="eternitygenerator4"></span>)
+			</td>
+			<td class="generator">
+			x<span id="eternitygeneratormultiplyer4"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyeternitygenerator(4)" id="buyEG4">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			五阶永恒生成器
+			</td>
+			<td class="generator">
+			(<span id="eternitygenerator5"></span>)
+			</td>
+			<td class="generator">
+			x<span id="eternitygeneratormultiplyer5"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyeternitygenerator(5)" id="buyEG5">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			六阶永恒生成器
+			</td>
+			<td class="generator">
+			(<span id="eternitygenerator6"></span>)
+			</td>
+			<td class="generator">
+			x<span id="eternitygeneratormultiplyer6"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyeternitygenerator(6)" id="buyEG6">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			七阶永恒生成器
+			</td>
+			<td class="generator">
+			(<span id="eternitygenerator7"></span>)
+			</td>
+			<td class="generator">
+			x<span id="eternitygeneratormultiplyer7"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyeternitygenerator(7)" id="buyEG7">
+			</td>
+		</tr>
+		<tr>
+			<td class="generator">
+			八阶永恒生成器
+			</td>
+			<td class="generator">
+			(<span id="eternitygenerator8"></span>)
+			</td>
+			<td class="generator">
+			x<span id="eternitygeneratormultiplyer8"></span>
+			</td>
+			<td class="generator">
+			<input type="button" onclick="buyeternitygenerator(8)" id="buyEG8">
+			</td>
+		</tr>
+	</table>
+
+</div>
+
+<div id="eternity_upgrade" style="display: none;">
+	<table align="center">
+		<tr>
+	    <td id="eu1">
+	    购买普通生成器不消耗点数。<br />
+	    <input type="button" onclick="eu1()" value="1永恒点数" id="eu1b">
+	    </td>
+	    <td id="eu2">
+	    将永恒生成器的效果变得极强。<br />
+	    <input type="button" onclick="eu2()" value="5永恒点数" id="eu2b">
+	    </td>
+	    <td id="eu3">
+	    根据永恒次数提升加速效果。<br />
+	    (+<span id="eu3_effect"></span>)<br />
+	    <input type="button" onclick="eu3()" value="10永恒点数" id="eu3b">
+	    </td>
+	  </tr>
+		<tr>
+	    <td id="eu4">
+	    购买无限生成器不消耗点数。<br />
+	    <input type="button" onclick="eu4()" value="20永恒点数" id="eu4b">
+	    </td>
+	    <td id="eu5">
+	    解锁永恒挑战。<br />
+	    <input type="button" onclick="eu5()" value="100永恒点数" id="eu5b">
+	    </td>
+	    <td id="eu6">
+	    若已得到第二条永恒挑战加成，永恒工厂以相同效率产生无限次数。<br />
+	    <input type="button" onclick="eu6()" value="1e10永恒点数" id="eu6b">
+	    </td>
+	  </tr>
+		<tr>
+	    <td id="eu7">
+	    开始生产时间。<br />
+	    <input type="button" onclick="eu7()" value="1e28永恒点数" id="eu7b">
+	    </td>
+	    <td id="eu8">
+	    开始生产空间。<br />
+	    <input type="button" onclick="eu8()" value="1e100永恒点数" id="eu8b">
+	    </td>
+	    <td id="eu9">
+	    开始生产时空。<br />
+	    <input type="button" onclick="eu9()" value="1e150永恒点数" id="eu9b">
+	    </td>
+	  </tr>
+		<tr>
+	    <td id="eu10">
+	    解锁宇宙。<br />
+	    <input type="button" onclick="eu10()" value="1e1750永恒点数" id="eu10b">
+	    </td>
+	  </tr>
+	</table>
+</div>
+
+<div id="eternity_producer" style="display: none;">
+	<p>
+		你现在有<span id="eternities"></span>永恒。<br />
+		<input type="button" value="Max All" onclick="maxAlleternityproducer()"/>
+	</p>
+	<table align="center">
+		<tr>
+	    <td style="background-color:#0000ff;">
+	    永恒工厂等级<span id="ep1"></span><span id="ep1_new"></span><br />
+	    <input type="button" onclick="buyeternityproducer(1)" id="buyEP1">
+	    </td>
+	    <td style="background-color:#0000ff;">
+	    永恒工厂效率<span id="ep2"></span><span id="ep2_new"></span><br />
+	    <input type="button" onclick="buyeternityproducer(2)" id="buyEP2">
+	    </td>
+	    <td style="background-color:#0000ff;">
+	    永恒升级3效果x<span id="ep3"></span><span id="ep3_new"></span><br />
+	    当前上限为<span id="ep3_cap"></span><br />
+	    <input type="button" onclick="buyeternityproducer(3)" id="buyEP3">
+	    </td>
+	  </tr>
+		<tr id="ep_new" style="display:none;">
+	    <td style="background-color:#0000ff;">
+	    永恒工厂等级生成器<span id="ep4"></span><br />
+	    <input type="button" onclick="buyeternityproducer(4)" id="buyEP4">
+	    </td>
+	    <td style="background-color:#0000ff;">
+	    永恒工厂效率生成器<span id="ep5"></span><br />
+	    <input type="button" onclick="buyeternityproducer(5)" id="buyEP5">
+	    </td>
+	    <td style="background-color:#0000ff;">
+	    永恒升级3效果生成器<span id="ep6"></span><br />
+	    <input type="button" onclick="buyeternityproducer(6)" id="buyEP6">
+	    </td>
+	  </tr>
+	</table>
+</div>
+
+<div id="eternity_challenge" style="display: none;">
+	<p>
+		注意：永恒挑战的目标是<span style="color:#00ff00;">无限点数</span>。<br />
+		启动永恒挑战会重置无限生成器。<br />
+		完成一定数量的永恒挑战会解锁如下加成：<br />
+		<span id="ecr1" style="color:#ff0000;">1：根据完成的永恒挑战数量提升永恒生成器产量。(x<span id="ecr1_effect"></span>)</span><br />
+		<span id="ecr2" style="color:#ff0000;">2：根据完成的永恒挑战数量提升永恒产量。(x<span id="ecr2_effect"></span>)</span><br />
+		<span id="ecr3" style="color:#ff0000;">4：永恒能量和完成的永恒挑战提升普通生成器产量。(x<span id="ecr3_effect"></span>)</span><br />
+		<span id="ecr4" style="color:#ff0000;">8：解锁第二排永恒工厂。</span><br />
+		<span id="ecr5" style="color:#ff0000;">16：每秒获得100%重置可获得的无限点数。</span><br />
+		<span id="ecr6" style="color:#ff0000;">32：解锁时空。</span><br />
+	</p>
+	<table align="center">
+		<tr>
+			<td id="ec1">
+				永恒挑战1<br />
+				无限时自动退出挑战。<br />
+				目标：<span id="ec1_goal"></span>无限点数。<br />
+				完成次数：(<span id="ec1_completed"></span>/4)<br />
+				<input type="button" onclick="ec(1)" value="开始挑战" id="ec1b"><br />
+			</td>
+			<td id="ec2">
+				永恒挑战2<br />
+				禁用永恒生成器。<br />
+				目标：<span id="ec2_goal"></span>无限点数。<br />
+				完成次数：(<span id="ec2_completed"></span>/4)<br />
+				<input type="button" onclick="ec(2)" value="开始挑战" id="ec2b"><br />
+			</td>
+		</tr>
+		<tr>
+			<td id="ec3">
+				永恒挑战3<br />
+				禁用无限生成器。<br />
+				目标：<span id="ec3_goal"></span>无限点数。<br />
+				完成次数：(<span id="ec3_completed"></span>/4)<br />
+				<input type="button" onclick="ec(3)" value="开始挑战" id="ec3b"><br />
+			</td>
+			<td id="ec4">
+				永恒挑战4<br />
+				禁用献祭和普通生成器7、8。<br />
+				目标：<span id="ec4_goal"></span>无限点数。<br />
+				完成次数：(<span id="ec4_completed"></span>/4)<br />
+				<input type="button" onclick="ec(4)" value="开始挑战" id="ec4b"><br />
+			</td>
+		</tr>
+		<tr>
+			<td id="ec5">
+				永恒挑战5<br />
+				生成器价格膨胀加快。<br />
+				目标：<span id="ec5_goal"></span>无限点数。<br />
+				完成次数：(<span id="ec5_completed"></span>/4)<br />
+				<input type="button" onclick="ec(5)" value="开始挑战" id="ec5b"><br />
+			</td>
+			<td id="ec6">
+				永恒挑战6<br />
+				普通、无限、永恒生成器产量^0.1。<br />
+				目标：<span id="ec6_goal"></span>无限点数。<br />
+				完成次数：(<span id="ec6_completed"></span>/4)<br />
+				<input type="button" onclick="ec(6)" value="开始挑战" id="ec6b"><br />
+			</td>
+		</tr>
+		<tr>
+			<td id="ec7">
+				永恒挑战7<br />
+				无限次数影响生成器产量。(^<span id="ec7_factor"></span>)<br />
+				目标：<span id="ec7_goal"></span>无限点数。<br />
+				完成次数：(<span id="ec7_completed"></span>/4)<br />
+				<input type="button" onclick="ec(7)" value="开始挑战" id="ec7b"><br />
+			</td>
+			<td id="ec8">
+				永恒挑战8<br />
+				同时开启所有无限挑战，退出其中任何一个都会导致此挑战无法完成。<br />
+				目标：<span id="ec8_goal"></span>无限点数。<br />
+				完成次数：(<span id="ec8_completed"></span>/4)<br />
+				<input type="button" onclick="ec(8)" value="开始挑战" id="ec8b"><br />
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div id="eternity_timespace" style="display: none;">
+	<p>
+		<input type="button" value="Max All" onclick="ts_max()"/>
+	</p>
+	<div style="width:33%;float:left;">
+		<p>
+			你现在有<span id="ts_time"></span>时间。<br />
+		</p>
+		<table align="center">
+			<tr>
+		    <td style="background-color:#0000ff;">
+		    提升时间获取3倍<br />
+		    <input type="button" onclick="ts_buyable(1)" id="buyst1">
+		    </td>
+		  </tr>
+		</table>
+		<table align="center">
+			<tr>
+		    <td id="tstu1">
+		    时间提升第二排永恒工厂速度。(x<span id="tstu1_effect"></span>)<br />
+		    <input type="button" onclick=" ts_time_upgrade1()" value="1000时间">
+		    </td>
+		    <td id="tstu2">
+		    永恒点数提升时间速度。(x<span id="tstu2_effect"></span>)<br />
+		    <input type="button" onclick=" ts_time_upgrade2()" value="1e5时间">
+		    </td>
+		    <td id="tstu3">
+		    时间提升时间速度。(x<span id="tstu3_effect"></span>)<br />
+		    <input type="button" onclick=" ts_time_upgrade3()" value="1e10时间">
+		    </td>
+		  </tr>
+		</table>
+	</div>
+	<div style="width:33%;float:left;">
+		<p>
+			你现在有<span id="ts_timespace"></span>时空。<br />
+		</p>
+		<table align="center">
+			<tr>
+		    <td style="background-color:#0000ff;">
+		    提升时空获取3倍<br />
+		    <input type="button" onclick="ts_buyable(3)" id="buyst3">
+		    </td>
+		  </tr>
+		</table>
+		<table align="center">
+			<tr>
+		    <td id="tstsu1">
+		    时空提升时间和空间。(x<span id="tstsu1_effect"></span>)<br />
+		    <input type="button" onclick=" ts_timespace_upgrade1()" value="1e75时空">
+		    </td>
+		    <td id="tstsu2">
+		    时空降低时空价格提升。(<span id="tstsu2_effect"></span>)<br />
+		    <input type="button" onclick=" ts_timespace_upgrade2()" value="1e125时空">
+		    </td>
+		    <td id="tstsu3">
+		    时空提升时空。(x<span id="tstsu3_effect"></span>)<br />
+		    <input type="button" onclick=" ts_timespace_upgrade3()" value="1e160时空">
+		    </td>
+		  </tr>
+		</table>
+	</div>
+	<div style="width:33%;float:left;">
+		<p>
+			你现在有<span id="ts_space"></span>空间。<br />
+		</p>
+		<table align="center">
+			<tr>
+		    <td style="background-color:#0000ff;">
+		    提升空间获取3倍<br />
+		    <input type="button" onclick="ts_buyable(2)" id="buyst2">
+		    </td>
+		  </tr>
+		</table>
+		<table align="center">
+			<tr>
+		    <td id="tssu1">
+		    永恒提升空间。(x<span id="tssu1_effect"></span>)<br />
+		    <input type="button" onclick=" ts_space_upgrade1()"value="3空间">
+		    </td>
+		    <td id="tssu2">
+		    空间提升永恒生成器速度。(x<span id="tssu2_effect"></span>)<br />
+		    <input type="button" onclick=" ts_space_upgrade2()"value="3e5空间">
+		    </td>
+		    <td id="tssu3">
+		    空间提升空间。(x<span id="tssu3_effect"></span>)<br />
+		    <input type="button" onclick=" ts_space_upgrade3()"value="1e12空间">
+		    </td>
+		  </tr>
+		</table>
+	</div>
+	<div id="universe" style="display:none;">
+		<p>
+			你现在有<span id="ts_uni"></span>宇宙。<br />
+		</p>
+		<table align="center">
+			<tr>
+		    <td style="background-color:#0000ff;">
+		    消耗时空获得1宇宙<br />
+		    <input type="button" onclick="ts_buyable(4)" id="buyst4">
+		    </td>
+		  </tr>
+		</table>
+		<table align="center">
+			<tr>
+		    <td id="tsuu1">
+		    膨胀宇宙<br />空间获取随本次永恒时间增加(x<span id="tsuu1_effect"></span>)<br />
+		    <input type="button" onclick=" ts_uni_upgrade1()"value="1宇宙">
+		    </td>
+		    <td id="tsuu2">
+		    多重宇宙<br />购买过的宇宙总数大幅提升膨胀宇宙效果公式(x<span id="tsuu2_effect"></span>)<br />
+		    <input type="button" onclick=" ts_uni_upgrade2()"value="1宇宙">
+		    </td>
+		    <td id="tsuu3">
+		    宇宙共振<br />膨胀宇宙效果提升永恒点数获取(x<span id="tsuu3_effect"></span>)<br />
+		    <input type="button" onclick=" ts_uni_upgrade3()"value="1宇宙">
+		    </td>
+		  </tr>
+		</table>
+	</div>
 </div>
 
 <div id="option" style="display: none;">
 <div style="width:33%;float:left;">
 <p>
 关于<br />
-本游戏模仿<a href="http://ivark.github.io/" target="_blank">《反物质维度》</a>和<a href="https://dan-simon.github.io/misc/fe000000/" target="_blank">《FE000000》</a>制作，你可以点击链接来玩它们。<br />
+本游戏灵感来源：<a href="http://ivark.github.io/" target="_blank">《反物质维度》</a>、<a href="https://dan-simon.github.io/misc/fe000000/" target="_blank">《FE000000》</a>，你可以点击链接来玩它们。<br />
 调整tick间隔（量力而行！）<input type="range" id="delay" value="1.7" min="1.5" max="2.3" step="0.01"><span id="delaytext"></span>
 <input type="button" value="确认修改" onclick="changedelay()"><br />
 调整有效数字位数：
@@ -769,6 +1323,14 @@
 <div style="width:33%;float:left;">
 <p>
 更新履历<br />
+v0.2.8 2024-4-30 更新“时空”。<br />
+v0.2.7 2023-9-23 更新“永恒挑战”。<br />
+v0.2.6 2023-9-22 更新“永恒升级”，“产生序数”按钮增加长按=连点功能。<br />
+v0.2.5 2023-9-19 修复了某个挑战bug，并修改了普通挑战3的描述。<br />
+v0.2.4 2023-8-9 修复了批量购买生成器的bug。<br />
+v0.2.3 2023-8-8 更新“永恒里程碑”和“永恒工厂”。<br />
+v0.2.2 2023-8-8 更新“永恒生成器”。<br />
+v0.2.1 2023-8-3 更新“进入永恒”，并增加了普通挑战中点数硬上限。<br />
 v0.1.10 2023-4-23 新增一些显示项目。<br />
 v0.1.9 2023-4-23 更新“序数”。<br />
 v0.1.8 2023-4-20 新增调整有效数字的功能。<br />
@@ -796,15 +1358,15 @@ v0.0.1 2022-11-12 完成这个页面。
 <div style="width:33%;float:left;">
 <p>存档相关</p>
 <p>
-<input type="button" value="save" onclick="save()" />
-<input type="button" value="load" onclick="load()" />
-<input type="button" value="export to clipboard" onclick="exportgame()" />
-<input type="button" value="reset" onclick="reset()" />
+<input type="button" value="保存至自动存档" onclick="save()" />
+<input type="button" value="读取自动存档" onclick="load()" />
+<input type="button" value="导出至剪贴板" onclick="exportgame()" />
+<input type="button" value="彻底重置" onclick="reset()" />
 </p>
 <p>
-import:
+导入:
 <input id="gamedata">
-<input type="button" value="import" onclick="importgame()" />
+<input type="button" value="导入" onclick="importgame()" />
 </p>
 </div>
 </div>
@@ -883,6 +1445,40 @@ import:
 	<div class="notification" id="notificationach24">
 		<span class="notification-text">完成成就：还不是时候</span>
 	</div>
+	<div class="notification" id="notificationach25">
+		<span class="notification-text">完成成就：永远增长的数字</span>
+	</div>
+	<div class="notification" id="notificationach26">
+		<span class="notification-text">完成成就：永远的八阶生成器</span>
+	</div>
+	<div class="notification" id="notificationach27">
+		<span class="notification-text">完成成就：我们不需要1000次</span>
+	</div>
+	<div class="notification" id="notificationach28">
+		<span class="notification-text">完成成就：在一起强大</span>
+	</div>
+	<div class="notification" id="notificationach29">
+		<span class="notification-text">完成成就：这个，不需要了</span>
+	</div>
+	<div class="notification" id="notificationach30">
+		<span class="notification-text">完成成就：如果你没有忘记……</span>
+	</div>
+	<div class="notification" id="notificationach31">
+		<span class="notification-text">完成成就：刹那永恒</span>
+	</div>
+	<div class="notification" id="notificationach32">
+		<span class="notification-text">完成成就：不再是2^2^x</span>
+	</div>
+	<div class="notification" id="notificationach33">
+		<span class="notification-text">完成成就：无限多的时空</span>
+	</div>
+	<div class="notification" id="notificationach34">
+		<span class="notification-text">完成成就：多余的一个？</span>
+	</div>
+	<div class="notification" id="notificationach35">
+		<span class="notification-text">完成成就：电子对产生</span>
+	</div>
+
 </div>
 <div id="achievements" style="display: none;">
 <table align="center">
@@ -961,7 +1557,7 @@ import:
     </td>
     <td class="achNO" id="ach18">
     	生成器刺客
-    	<span class="tooltip-text">拥有1000个以上八阶生成器时购买单个八阶生成器。</span>
+    	<span class="tooltip-text">拥有3000个以上八阶生成器时购买单个八阶生成器。</span>
     </td>
     <td class="achNO" id="ach19">
     	没有技术含量
@@ -973,7 +1569,7 @@ import:
     </td>
     <td class="achNO" id="ach21">
     	弹指无限
-    	<span class="tooltip-text">在0.25秒内无限。</span>
+    	<span class="tooltip-text">在0.25秒内进入无限。</span>
     </td>
     <td class="achNO" id="ach22">
     	ω到底在哪？
@@ -986,6 +1582,54 @@ import:
     <td class="achNO" id="ach24">
     	还不是时候
     	<span class="tooltip-text">加速效果达到^4000。</span>
+    </td>
+  </tr>
+   <tr>
+    <td class="achNO" id="ach25">
+    	永远增长的数字
+    	<span class="tooltip-text">进入永恒。</span>
+    </td>
+    <td class="achNO" id="ach26">
+    	永远的八阶生成器
+    	<span class="tooltip-text">购买一个永恒生成器。</span>
+    </td>
+    <td class="achNO" id="ach27">
+    	我们不需要1000次
+    	<span class="tooltip-text">完成所有永恒里程碑。</span>
+    </td>
+    <td class="achNO" id="ach28">
+    	在一起强大
+    	<span class="tooltip-text">完成一次永恒挑战。</span>
+    </td>
+    <td class="achNO" id="ach29">
+    	这个，不需要了
+    	<span class="tooltip-text">完成16次永恒挑战。</span>
+    </td>
+    <td class="achNO" id="ach30">
+    	如果你没有忘记……
+    	<span class="tooltip-text">购买永恒升级7。</span>
+    </td>
+    <td class="achNO" id="ach31">
+    	刹那永恒
+    	<span class="tooltip-text">在0.25秒内进入永恒。</span>
+    </td>
+    <td class="achNO" id="ach32">
+    	不再是2^2^x
+    	<span class="tooltip-text">一次获得2^2^12以上的永恒点数。</span>
+    </td>
+  </tr>
+  <tr>
+  	<td class="achNO" id="ach33">
+    	无限多的时空
+    	<span class="tooltip-text">时空达到1.79e308。</span>
+    </td>
+    <td class="achNO" id="ach34">
+    	多余的一个？
+    	<span class="tooltip-text">总计购买15个宇宙。</span>
+    </td>
+    <td class="achNO" id="ach35">
+    	电子对产生
+    	<span class="tooltip-text">湮灭。</span>
     </td>
   </tr>
 </table>

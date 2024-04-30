@@ -109,3 +109,33 @@ auto_infinity_parameter.addEventListener("input", function() {
 		game.automator.infinity.parameter = auto_infinity_parameter.value;
 	}
 });
+const auto_eternity_checkbox = document.getElementById("auto_eternity_checkbox");
+auto_eternity_checkbox.addEventListener("input", function() {
+	if(auto_eternity_checkbox.checked == true){
+		let d=new Date();
+		game.automator.eternity.timer = d.getTime();
+		game.automator.eternity.checked = true;
+	}else{
+		game.automator.eternity.checked = false;
+	}
+});
+const auto_eternity_mode = document.getElementById("auto_eternity_mode");
+auto_eternity_mode.addEventListener("change", function() {
+	if(auto_eternity_mode){
+		game.automator.eternity.mode = auto_eternity_mode.value;
+	}
+});
+const auto_eternity_parameter = document.getElementById("auto_eternity_parameter");
+auto_eternity_parameter.addEventListener("input", function() {
+	if(auto_eternity_parameter){
+		game.automator.eternity.parameter = auto_eternity_parameter.value;
+	}
+});
+const auto_infinity_generator_checkbox = document.getElementById("autobuyinfinitygenerator");
+auto_infinity_generator_checkbox.addEventListener("input", function() {
+	if(auto_infinity_generator_checkbox.checked == true){
+		game.infinity.generators.autobuyer = true;
+	}else{
+		game.infinity.generators.autobuyer = false;
+	}
+});

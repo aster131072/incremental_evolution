@@ -1,11 +1,15 @@
 let game = {
 	"ach": [0,0,0,0,0,0,0,0,
 					0,0,0,0,0,0,0,0,
-					0,0,0,0,0,0,0,0],
+					0,0,0,0,0,0,0,0,
+					0,0,0,0,0,0,0,0,
+					0,0,0],
 	"confirmconfig":{
 		"sacrifice":true,
 		"boost":true,
-		"infinity":true
+		"infinity":true,
+		"eternity":true,
+		"annihilation":true
 	},
 	"automator":{
 		"sacrifice":{
@@ -21,6 +25,11 @@ let game = {
 			"parameter":0
 		},
 		"infinity":{
+			"checked":false,
+			"mode":"time",
+			"parameter":0
+		},
+		"eternity":{
 			"checked":false,
 			"mode":"time",
 			"parameter":0
@@ -71,9 +80,7 @@ let game = {
 			"scale":[1e3,1e4,1e5,1e6,1e8,1e10,1e12,1e15],
 			"actuallprice":[0,0,0,0,0,0,0,0],
 			"factor":[1,1,1,1,1,1,1,1],
-			"autobuyer":[false,false,false,false,false,false,false,false],
-			"bulkbuy":[false,false,false,false,false,false,false,false],
-			"autodelay":[0,0,0,0,0,0,0,0]
+			"autobuyer":false
 		},
 		"power":0,
 		"upgrades":[0,0,0,0,0,0,0,0,0,0,0,0],//12个
@@ -113,21 +120,72 @@ let game = {
 			"scale":[1e3,1e4,1e5,1e6,1e8,1e10,1e12,1e15],
 			"actuallprice":[0,0,0,0,0,0,0,0],
 			"factor":[1,1,1,1,1,1,1,1],
+			"autobuyer":false
+		},
+		"power":0,
+		"upgrades":[0,0,0,0,0,0,0,0,0,0],//10total
+		"producers":{
+			"amount":[0,0,1,0,0,0,0,0],
+			"bought":[0,0,1,0,0,0,0,0],
+			"price":[1,1,1,1,1,1],
+			"scale":[10,10,10,10,10,10],
+			"actuallprice":[0,0,0,0,0,0],
+			"autobuyer":false
+		},
+		"timespace":{
+			"time":0,
+			"space":0,
+			"timespace":0,
+			"universe":0,
+			"upgrades":[0,0,0,
+									0,0,0,
+									0,0,0,
+									0,0,0],
+			"buyables":[0,0,0,0],
+			"price":[1,1,1,1e250],
+			"scale":[5,5,5,1e20],
+			"actuallprice":[0,0,0,0],
+			"autobuyer":false
+		},
+		"challenged":[0,0,0,0,0,0,0,0],
+		"inchallenge":[0,0,0,0,0,0,0,0],
+		"milestones":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],//16total
+		"haseternitied":false
+	},
+	"annihilation":{
+		"starttime":0,
+		"timespent":0,
+		"requirement":2e2257,
+		"number":0,
+		"totalnumber":0,
+		"annihilations":0,
+		"lastnumber":0,
+		"speed":1,
+		"multiplier":2,
+		"generators":{
+			"amount":[0,0,0,0,0,0,0,0],
+			"bought":[0,0,0,0,0,0,0,0],
+			"price":[10,100,1e4,1e6,1e9,1e13,1e18,1e24],
+			"scale":[1e3,1e4,1e5,1e6,1e8,1e10,1e12,1e15],
+			"actuallprice":[0,0,0,0,0,0,0,0],
+			"factor":[1,1,1,1,1,1,1,1],
 			"autobuyer":[false,false,false,false,false,false,false,false],
 			"bulkbuy":[false,false,false,false,false,false,false,false],
 			"autodelay":[0,0,0,0,0,0,0,0]
 		},
 		"power":0,
-		"upgrades":[0,0,0,0,0,0,0,0,0,0,0,0],//12个
+		"upgrades":[0,0,0,0,0,0,0,0,0,0,0,0],//12total
 		"challenged":[0,0,0,0,0,0,0,0],
 		"inchallenge":[0,0,0,0,0,0,0,0],
-		"haseternitied":false
+		"milestones":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],//16total
+		"hasannihilated":false
 	},
 	"time": 0,
 	"starttime":0,
-	"precision":4,
+	"precision":5,
 	"delay": 50
 };
 game.infinity.requirement=ExpantaNum.pow(2,256);
 game.eternity.requirement=ExpantaNum.pow(2,1024);
+game.annihilation.requirement=ExpantaNum.pow(2,7500);
 originalgame = game;

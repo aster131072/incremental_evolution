@@ -68,16 +68,16 @@ game.normal.upgrades[7]=1;
 }
 }
 function nu9(){
-if(ExpantaNum(game.normal.number).gte(1e40)&&game.normal.upgrades[8]==0){
-game.normal.number=ExpantaNum(game.normal.number).minus(1e40);
-document.getElementById("nu9").style.backgroundColor="#00ff00";
-//document.getElementById("nu9b").value="已购买";
-game.normal.upgrades[8]=1;
-getAchievement(8);
-for(i=1;i<=8;i++){
-	document.getElementById("autoNG"+i).style.display='table-cell'
-}
-}
+	if(ExpantaNum(game.normal.number).gte(1e40)&&game.normal.upgrades[8]==0){
+		game.normal.number=ExpantaNum(game.normal.number).minus(1e40);
+		document.getElementById("nu9").style.backgroundColor="#00ff00";
+		//document.getElementById("nu9b").value="已购买";
+		game.normal.upgrades[8]=1;
+		getAchievement(8);
+		for(i=1;i<=8;i++){
+			document.getElementById("autoNG"+i).style.display='table-cell';
+		}
+	}
 }
 function nu10(){
 if(ExpantaNum(game.normal.number).gte(1e50)&&game.normal.upgrades[9]==0){

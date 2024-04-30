@@ -1,5 +1,10 @@
 function get_ord_number(){
-	game.infinity.ordinal.number+=get_ordinal_number;
+	if(get_ordinal_number == 1.797e308) {
+		game.infinity.ordinal.number = 1.797e308;
+	} else{
+		game.infinity.ordinal.number+=get_ordinal_number;
+	}
+	if(game.infinity.ordinal.number==Infinity) game.infinity.ordinal.number = 1.797e308;
 	getAchievement(20);
 }
 function get_ord_power(){

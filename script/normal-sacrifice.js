@@ -9,16 +9,17 @@ function sacrifice(){
 				if(game.infinity.inchallenge[4]==1) game.infinity.challenge.ic5_times+=1;
 				game.normal.sacrifice=get_sacrifice;
 				document.getElementById("sacrifice_factor").innerHTML=ExpantaNum(game.normal.sacrifice);
-				
-				if(game.normal.inchallenge[2]==1){
-					game.normal.generators.amount[0]=0;
-				}else{
-					for(let i=0;i<7;i++){
-						game.normal.generators.amount[i]=0;
+				if(game.eternity.milestones[6]==0) {
+					if(game.normal.inchallenge[2]==1){
+						game.normal.generators.amount[0]=0;
+					}else{
+						for(let i=0;i<7;i++){
+							game.normal.generators.amount[i]=0;
+						}
 					}
+					game.normal.number=ExpantaNum(0);
 				}
-				game.normal.number=ExpantaNum(0);
-				
+
 				getAchievement(9);
 				if(ExpantaNum(game.normal.sacrifice).gte(1e100)) getAchievement(15);
 			}
