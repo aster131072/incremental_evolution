@@ -16,23 +16,23 @@ let game = {
 			"checked":false,
 			"mode":"time",
 			"timer":0,
-			"parameter":0
+			"parameter":1000
 		},
 		"boost":{
 			"checked":false,
 			"mode":"time",
 			"timer":0,
-			"parameter":0
+			"parameter":1000
 		},
 		"infinity":{
 			"checked":false,
 			"mode":"time",
-			"parameter":0
+			"parameter":1000
 		},
 		"eternity":{
 			"checked":false,
 			"mode":"time",
-			"parameter":0
+			"parameter":1000
 		}
 	},
 	"normal":{
