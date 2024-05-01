@@ -90,6 +90,7 @@
 <input type="button" onclick="setTab('eternity_producer')" value="永恒工厂" style="background-color:#0000ff;display: none;" id="eternity_producer_tab">
 <input type="button" onclick="setTab('eternity_challenge')" value="永恒挑战" style="background-color:#0000ff;display: none;" id="eternity_challenge_tab">
 <input type="button" onclick="setTab('eternity_timespace')" value="时空" style="background-color:#0000ff;display: none;" id="eternity_timespace_tab">
+<input type="button" onclick="setTab('annihilation_challenge')" value="湮灭挑战" style="background-color:#8000ff;display: none;" id="annihilation_challenge_tab">
 <input type="button" onclick="setTab('achievements')" value="成就">
 <input type="button" onclick="setTab('option')" value="杂项">
 
@@ -102,7 +103,6 @@
 <input type="button" value="+1" id="manual" />
 <input type="hidden" value="Max All" onclick="maxAllNormalGenerator()" id="max all" />
 </p>
-<p><input type="button" value="cheat" id="cheat"/></p>
 <p><span id="ic2_anti"></span></p>
 <table align="center">
 	<tr>
@@ -1305,6 +1305,10 @@
 	</div>
 </div>
 
+<div id="annihilation_challenge" style="display: none;">
+	
+</div>
+
 <div id="option" style="display: none;">
 <div style="width:33%;float:left;">
 <p>
@@ -1368,6 +1372,8 @@ v0.0.1 2022-11-12 完成这个页面。
 <input id="gamedata">
 <input type="button" value="导入" onclick="importgame()" />
 </p>
+<p>跳转至上版本末尾：</p>
+<p><input type="button" value="cheat" id="cheat"/></p>
 </div>
 </div>
 
