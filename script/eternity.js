@@ -83,6 +83,10 @@ function eternity(){
 				game.normal.challenged[i-1]=0;
 				document.getElementById("nc"+i).style.backgroundColor="#ff0000";
 			}
+			document.getElementById("auto_sacrifice").style.display='none';
+			document.getElementById("auto_boost").style.display='none';
+			document.getElementById("auto_infinity").style.display='none';
+			
 		}
 		if(game.eternity.milestones[11]==0){
 			for(let i=1;i<=game.infinity.challenged.length;i++){

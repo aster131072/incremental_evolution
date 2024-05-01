@@ -10,6 +10,9 @@ function annihilation(){
 			game.annihilation.totalnumber=ExpantaNum(game.annihilation.totalnumber).add(game.annihilation.lastnumber);
 			game.annihilation.annihilations=ExpantaNum(game.annihilation.annihilations).add(1);
 			if(ExpantaNum(game.annihilation.annihilations).eq(1)) getAchievement(35);
+			if(!game.annihilation.hasannihilated) {
+				document.getElementById("annihilation_challenge_tab").style.display='inline';
+			}
 		}
 
 		document.getElementById("infinity_challenge_tab").style.display='none';
@@ -102,6 +105,9 @@ function annihilation(){
 			game.normal.challenged[i-1]=0;
 			document.getElementById("nc"+i).style.backgroundColor="#ff0000";
 		}
+		document.getElementById("auto_sacrifice").style.display='none';
+		document.getElementById("auto_boost").style.display='none';
+		document.getElementById("auto_infinity").style.display='none';
 		for(let i=1;i<=game.infinity.challenged.length;i++){
 			game.infinity.challenged[i-1]=0;
 			document.getElementById("ic"+i).style.backgroundColor="#ff0000";
