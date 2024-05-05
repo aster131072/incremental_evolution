@@ -29,7 +29,7 @@ function infinity(){
 		}
 		
 		game.infinity.power=0;
-		if(game.infinity.upgrades[5]==0) {
+		if(game.infinity.upgrades[5]==0&&game.eternity.milestones[2]==0) {
 			game.normal.upgrades=[0,0,0,0,0,0,0,0,0,0,0];
 			game.normal.generators.autobuyer=[false,false,false,false,false,false,false,false];
 			for(let i=1;i<=8;i++){
